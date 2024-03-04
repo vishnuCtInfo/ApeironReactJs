@@ -15,11 +15,12 @@ import axios from "axios";
 import Header from "../Components/Header";
 import { IsAuthenticated } from "../Utils/Auth";
 import { redux_setLogin } from "../redux-tools/userSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Footer from "../Components/Footer";
 export const configJSON = require("../Pages/Config");
 const AccountInfo = () => {
   const navigate = useNavigate();
+  const walletAddress = useSelector((state) => state.wallet.address);
 
   const [bitcoin, setBitcoin] = useState(false);
   const [bbitcoin, setBbitcoin] = useState("Alls");
@@ -31,13 +32,14 @@ const AccountInfo = () => {
     setIsLoader(true);
     axios({
       method: "get",
-      url: "http://34.202.125.96:8000/get-account-info-mainnet/G2G6LINUFCC4O4FSYTHLGEPSGEHSVSH7NFTZZE3Y5QIGAXARLN63PIC6JE",
+      url: `${configJSON?.baseUrl}${configJSON?.getAccountInfoMainnetEndPointURL}${walletAddress}/`,
+      // url: "http://34.202.125.96:8000/get-account-info-mainnet/G2G6LINUFCC4O4FSYTHLGEPSGEHSVSH7NFTZZE3Y5QIGAXARLN63PIC6JE",
       headers: {
         "Content-Type": "application/json",
       },
     })
       .then((res) => {
-        console.log({ res });
+        console.log('account ',res);
         setIsLoader(false);
         setFilterCoinData(res?.data);
       })
@@ -52,7 +54,8 @@ const AccountInfo = () => {
     setIsLoader(true);
     axios({
       method: "get",
-      url: "http://34.202.125.96:8000/get-account-info-testnet/G2G6LINUFCC4O4FSYTHLGEPSGEHSVSH7NFTZZE3Y5QIGAXARLN63PIC6JE",
+      url: `${configJSON?.baseUrl}${configJSON?.getAccountInfoTestnetEndPointURL}${walletAddress}/`,
+      // url: "http://34.202.125.96:8000/get-account-info-testnet/G2G6LINUFCC4O4FSYTHLGEPSGEHSVSH7NFTZZE3Y5QIGAXARLN63PIC6JE",
       headers: {
         "Content-Type": "application/json",
       },

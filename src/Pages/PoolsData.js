@@ -21,18 +21,17 @@ export const configJSON = require("../Pages/Config");
 const PoolsData = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [providerDefault, setProviderDefault] = useState("Provider");
+  const [providerDefault, setProviderDefault] = useState("Pact");
   const [filterCoinData, setFilterCoinData] = useState([]);
   const [isLoader, setIsLoader] = useState(false);
   const [dropdown, setDropdown] = useState(false);
   const [supportedData, setSupportedData] = useState();
 
-  //get pool data
-  const onHandleGetData = () => {
+  const poolForPact = () => {
     setIsLoader(true);
     axios({
       method: "get",
-      url: configJSON?.baseUrl + configJSON?.poolsEndPointURL,
+      url: configJSON?.baseUrl + configJSON?.poolsForPactEndPointURL,
       headers: {
         "Access-Control-Allow-Origin": "*",
         "Content-Type": "application/json",
@@ -46,6 +45,29 @@ const PoolsData = () => {
       .catch((error) => {
         setIsLoader(false);
         console.log("pool error", { error });
+        setFilterCoinData([]);
+      });
+  };
+
+  const poolForTinyman = () => {
+    setIsLoader(true);
+    axios({
+      method: "get",
+      url: configJSON?.baseUrl + configJSON?.poolsForTinymanEndPointURL,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => {
+        setIsLoader(false);
+        console.log("pool ", res);
+        setFilterCoinData(res?.data);
+      })
+      .catch((error) => {
+        setIsLoader(false);
+        console.log("pool error", { error });
+        setFilterCoinData([]);
       });
   };
 
@@ -62,7 +84,6 @@ const PoolsData = () => {
   };
 
   useEffect(() => {
-    onHandleGetData();
     getCurrancyData();
     const { token } = IsAuthenticated();
     console.log("token is : ", token);
@@ -72,6 +93,11 @@ const PoolsData = () => {
       dispatch(redux_setLogin(true));
     }
   }, []);
+
+  useEffect(() => {
+    if (providerDefault === "Pact") return poolForPact();
+    if (providerDefault === "Tinyman") return poolForTinyman();
+  }, [providerDefault]);
 
   return (
     <div className="body header-fixed is_dark">
@@ -97,7 +123,20 @@ const PoolsData = () => {
                       onClick={() => setDropdown(!dropdown)}
                       className="ct_options2"
                     >
-                      {supportedData &&
+                      <li
+                        className="ct_option2"
+                        onClick={() => setProviderDefault(`Pact`)}
+                      >
+                        <span className="ct_option-text2">Pact</span>
+                      </li>
+                      <li
+                        className="ct_option2"
+                        onClick={() => setProviderDefault(`Tinyman`)}
+                      >
+                        <span className="ct_option-text2">Tinyman</span>
+                      </li>
+
+                      {/* {supportedData &&
                         Object?.keys(supportedData)?.map((key) => (
                           <li
                             className="ct_option2"
@@ -109,7 +148,7 @@ const PoolsData = () => {
                               {key} {supportedData[key]}
                             </span>
                           </li>
-                        ))}
+                        ))} */}
                     </ul>
                   </>
                 )}
@@ -159,10 +198,13 @@ const PoolsData = () => {
                                   <tr>
                                     <td style={{ color: "#FFF" }}>{i + 1}</td>
                                     <td style={{ color: "#FFF" }}>
-                                      {item?.asset_1_id} /{" "}
-                                      {item?.asset_2_id !== null
-                                        ? item?.asset_2_id
-                                        : "Algo"}
+                                      {item?.asset_1_id !== null &&
+                                        item?.asset_1_name}
+                                      &nbsp; / &nbsp;
+                                      {
+                                        // item?.asset_2_id !== null &&
+                                        item?.asset_2_name
+                                      }
                                     </td>
                                     <td
                                       className="boild"

@@ -15,11 +15,11 @@ export const AssetsListEndPointURL = "tokenapi/asset_list";
 export const ArbitrageApportunitiesEndPointURL = "opportunitiesapi/arbitrage_opportunities/";
 export const hotMoversEndPointEndPointURL = "tokenapi/hotmovers";
 // export const poolsEndPointURL = "tokenapi/pool_data";
-export const poolsEndPointURL = "tokenapi/PoolsForPact/";
-
+export const poolsForPactEndPointURL = "tokenapi/PoolsForPact/";
+export const poolsForTinymanEndPointURL = "tokenapi/PoolsForTinyman/";
 export const hotMovers2EndPointURL = "tokenapi/hot_movers2";
 export const botCexToCexEndPointURL = 'bot/cextocex'    // http://192.168.1.34:8000/bot/cextocex
-export const getAccountInfoMainnetEndPointURL = 'transactionapi/get-walllet-info/'      // // http://34.202.125.96:8000/transactionapi/get-walllet-info/ http://34.202.125.96:8000/transactionapi/get-account-info-mainnet/MWR7GSIW2VYSXXQ6METWOPZDWOTAXJCOL3OVL7PBJIGG5POXESLAT5QOQE/
+// export const getAccountInfoMainnetEndPointURL = 'transactionapi/get-walllet-info/'      // // http://34.202.125.96:8000/transactionapi/get-walllet-info/ http://34.202.125.96:8000/transactionapi/get-account-info-mainnet/MWR7GSIW2VYSXXQ6METWOPZDWOTAXJCOL3OVL7PBJIGG5POXESLAT5QOQE/
 export const botDexToDexEndPointURL = "bot/dextodex" // http://34.202.125.96:8000/bot/dextodex
 export const getAppoEndPointURL = 'opportunitiesapi/poolspairsopportunities/' // http://34.202.125.96:8000/opportunitiesapi/poolspairsopportunities/
 export const SupportedVsCurrenciesEndPointURL = "tokenapi/supported-vs-currencies"; //pool page
@@ -32,11 +32,14 @@ export const getAlgorandTransactionMainnetEndPointURL = "transactionapi/algorand
 export const getAlgorandTransactionMainEndPointURL = "transactionapi/get-algorand-transaction-main/";
 export const getAlgorandTransactionTestnetEndPointURL = "transactionapi/algorand_transaction_testnet";
 export const getPendingTransactionMainEndPointURL = "transactionapi/get_pending_transactions_main/";
-export const getPendingTransactionTestEndPointURL = "transactionapi/ get_pending_transactions_test/";
-
- 
+export const getPendingTransactionTestEndPointURL = "transactionapi/get_pending_transactions_test/";
 
 
+//it apply but not use ?
+export const getAccountInfoMainnetEndPointURL = "transactionapi/get-account-info-mainnet/"; //all transaction page
+export const getAccountInfoTestnetEndPointURL = "transactionapi/ get-account-info-testnet/"; //all transaction page
+
+//not found where is used?
 export const poolspairsopportunitiesEndPointURL = "http://18.171.200.156:8000/opportunitiesapi/poolspairsopportunities/"; 
 
 
