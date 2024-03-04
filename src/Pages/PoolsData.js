@@ -27,6 +27,7 @@ const PoolsData = () => {
   const [dropdown, setDropdown] = useState(false);
   const [supportedData, setSupportedData] = useState();
 
+  //get pool data
   const onHandleGetData = () => {
     setIsLoader(true);
     axios({

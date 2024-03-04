@@ -14,7 +14,9 @@ export const ProviderEndPointURL = "tokenapi/dex_providers";
 export const AssetsListEndPointURL = "tokenapi/asset_list";
 export const ArbitrageApportunitiesEndPointURL = "opportunitiesapi/arbitrage_opportunities/";
 export const hotMoversEndPointEndPointURL = "tokenapi/hotmovers";
-export const poolsEndPointURL = "tokenapi/pool_data";
+// export const poolsEndPointURL = "tokenapi/pool_data";
+export const poolsEndPointURL = "tokenapi/PoolsForPact/";
+
 export const hotMovers2EndPointURL = "tokenapi/hot_movers2";
 export const botCexToCexEndPointURL = 'bot/cextocex'    // http://192.168.1.34:8000/bot/cextocex
 export const getAccountInfoMainnetEndPointURL = 'transactionapi/get-walllet-info/'      // // http://34.202.125.96:8000/transactionapi/get-walllet-info/ http://34.202.125.96:8000/transactionapi/get-account-info-mainnet/MWR7GSIW2VYSXXQ6METWOPZDWOTAXJCOL3OVL7PBJIGG5POXESLAT5QOQE/
