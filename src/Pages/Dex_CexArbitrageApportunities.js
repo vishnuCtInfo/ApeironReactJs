@@ -17,7 +17,7 @@ import { useDispatch } from "react-redux";
 import { IsAuthenticated } from "../Utils/Auth";
 import { redux_setLogin } from "../redux-tools/userSlice";
 import Footer from "../Components/Footer";
-export const configJSON = require("../Pages/Config");
+ 
 
 const Dex_CexArbitrageApportunities = () => {
   const navigate = useNavigate();

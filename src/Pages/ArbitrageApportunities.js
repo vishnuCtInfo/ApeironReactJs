@@ -19,7 +19,7 @@ import { redux_setLogin } from "../redux-tools/userSlice";
 import CloseDropdown from "../Components/CloseDropdown";
 import Footer from "../Components/Footer";
 import { redux_setApportunitiesMethod } from "../redux-tools/apportunitySlice";
-export const configJSON = require("../Pages/Config");
+ 
 
 const ArbitrageApportunities = () => {
   const navigate = useNavigate();

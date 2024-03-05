@@ -22,7 +22,7 @@ import { Formik } from "formik";
 import { Schema_login_form } from "../Utils/yupSchema";
 import Footer from "../Components/Footer";
 
-export const configJSON = require("../Pages/Config");
+ 
 
 const Login = () => {
   const navigate = useNavigate();
@@ -34,15 +34,10 @@ const Login = () => {
   const loginUser = async (values, { resetForm }) => {
     setIsLoader(true);
     try {
-      const res = await axios.post(
-        configJSON?.baseUrl + configJSON?.LoginEndPointURL,
-        values,
-        { headers: { "content-type": "application/x-www-form-urlencoded" } }
-      );
+      const res = await API_user_login(values);
       console.log("data: ", res?.data);
       if (res?.data?.success == true) {
         MESSAGE.success(res?.data?.message, 2);
-        // localStorage.setItem("token", JSON.stringify(res?.data?.token));
         const { data } = res;
         const { access, user } = data;
         const { email, id } = user;

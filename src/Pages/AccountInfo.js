@@ -17,7 +17,8 @@ import { IsAuthenticated } from "../Utils/Auth";
 import { redux_setLogin } from "../redux-tools/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import Footer from "../Components/Footer";
-export const configJSON = require("../Pages/Config");
+import { API_minnet_account_info_get, API_testnet_account_info_get } from "../Services/userAPI";
+ 
 const AccountInfo = () => {
   const navigate = useNavigate();
   const walletAddress = useSelector((state) => state.wallet.address);
@@ -27,48 +28,64 @@ const AccountInfo = () => {
   const [filterCoinData, setFilterCoinData] = useState([]);
   const [isLoader, setIsLoader] = useState(false);
 
-  const getMainnetAccountData = () => {
+  const getMainnetAccountData = async () => {
     setBbitcoin("Buy/Sell Arbitrage Opportunities");
     setIsLoader(true);
-    axios({
-      method: "get",
-      url: `${configJSON?.baseUrl}${configJSON?.getAccountInfoMainnetEndPointURL}${walletAddress}/`,
-      // url: "http://34.202.125.96:8000/get-account-info-mainnet/G2G6LINUFCC4O4FSYTHLGEPSGEHSVSH7NFTZZE3Y5QIGAXARLN63PIC6JE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => {
-        console.log('account ',res);
-        setIsLoader(false);
-        setFilterCoinData(res?.data);
-      })
-      .catch((err) => {
-        setIsLoader(false);
-        console.log({ err });
-      });
+    try {
+      const data = await API_minnet_account_info_get(walletAddress);
+      setFilterCoinData(data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoader(false);
+    }
+
+    // axios({
+    //   method: "get",
+    //   url: `${configJSON?.baseUrl}${configJSON?.getAccountInfoMainnetEndPointURL}${walletAddress}/`,
+    //   // url: "http://34.202.125.96:8000/get-account-info-mainnet/G2G6LINUFCC4O4FSYTHLGEPSGEHSVSH7NFTZZE3Y5QIGAXARLN63PIC6JE",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    // })
+    //   .then((res) => {
+    //     console.log("account ", res);
+    //     setIsLoader(false);
+    //     setFilterCoinData(res?.data);
+    //   })
+    //   .catch((err) => {
+    //     setIsLoader(false);
+    //     console.log({ err });
+    //   });
   };
 
-  const getTestNetAccountData = () => {
+  const getTestNetAccountData = async() => {
     setBbitcoin("Buy/Sell Arbitrage Opportunities");
-    setIsLoader(true);
-    axios({
-      method: "get",
-      url: `${configJSON?.baseUrl}${configJSON?.getAccountInfoTestnetEndPointURL}${walletAddress}/`,
-      // url: "http://34.202.125.96:8000/get-account-info-testnet/G2G6LINUFCC4O4FSYTHLGEPSGEHSVSH7NFTZZE3Y5QIGAXARLN63PIC6JE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => {
-        console.log({ res });
-        setIsLoader(false);
-        setFilterCoinData(res?.data);
-      })
-      .catch((err) => {
-        setIsLoader(false);
-        console.log({ err });
-      });
+    setIsLoader(true); try {
+      const data = await API_testnet_account_info_get(walletAddress);
+      setFilterCoinData(data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoader(false);
+    }
+    // axios({
+    //   method: "get",
+    //   url: `${configJSON?.baseUrl}${configJSON?.getAccountInfoTestnetEndPointURL}${walletAddress}/`,
+    //   // url: "http://34.202.125.96:8000/get-account-info-testnet/G2G6LINUFCC4O4FSYTHLGEPSGEHSVSH7NFTZZE3Y5QIGAXARLN63PIC6JE",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    // })
+    //   .then((res) => {
+    //     console.log({ res });
+    //     setIsLoader(false);
+    //     setFilterCoinData(res?.data);
+    //   })
+    //   .catch((err) => {
+    //     setIsLoader(false);
+    //     console.log({ err });
+    //   });
   };
 
   const onHandleBitcoinDropdown = () => {
@@ -78,6 +95,13 @@ const AccountInfo = () => {
       setBitcoin(true);
     }
   };
+
+  useEffect(()=>{
+    if(walletAddress){
+      getMainnetAccountData();
+      getTestNetAccountData();
+    }
+  },[walletAddress])
 
   const dispatch = useDispatch();
   useEffect(() => {

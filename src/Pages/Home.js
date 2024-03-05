@@ -32,7 +32,7 @@ import { redux_setLogin } from "../redux-tools/userSlice";
 import { redux_setCoinsData } from "../redux-tools/coinSlice";
 import Footer from "../Components/Footer";
 const projectId = "a9278b4293fadd62242e2f383fcb2f25";
-export const configJSON = require("../Pages/Config");
+ 
 
 const Home = () => {
   const coins = useSelector((state) => state?.coins?.data);

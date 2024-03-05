@@ -1,21 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { PeraWalletConnect } from "@perawallet/connect";
-import { DeflyWalletConnect } from "@blockshake/defly-connect";
-import logo_png from "../images/logo/logo.png";
-import logo_dark_png from "../images/logo/logo-dark.png";
-import defly_logo from "../images/layout/DeflyWallet--circle-black.svg";
-import bitcoin2_png from "../images/layout/bitcoin2.png";
-import PeraWallet from "../images/layout/PeraWallet.png";
+// import { PeraWalletConnect } from "@perawallet/connect";
+// import { DeflyWalletConnect } from "@blockshake/defly-connect";
+// import logo_png from "../images/logo/logo.png";
+// import logo_dark_png from "../images/logo/logo-dark.png";
+// import defly_logo from "../images/layout/DeflyWallet--circle-black.svg";
+// import bitcoin2_png from "../images/layout/bitcoin2.png";
+// import PeraWallet from "../images/layout/PeraWallet.png";
 import "../Style/style.css";
 import { useNavigate } from "react-router-dom";
-import { message, message as MESSAGE } from "antd";
-import axios from "axios";
+// import { message, message as MESSAGE } from "antd";
+// import axios from "axios";
 import Header from "../Components/Header";
 import { IsAuthenticated } from "../Utils/Auth";
 import { redux_setLogin } from "../redux-tools/userSlice";
 import { useDispatch } from "react-redux";
 import Footer from "../Components/Footer";
-export const configJSON = require("../Pages/Config");
+import { API_hot_mover2_data_get } from "../Services/userAPI";
+//  
 
 const HotMovers2 = () => {
   const navigate = useNavigate();
@@ -23,25 +24,33 @@ const HotMovers2 = () => {
   const [isLoader, setIsLoader] = useState(false);
   const [filterCoinData, setFilterCoinData] = useState([]);
 
-  const getHotCoinsData = () => {
+  const getHotCoinsData = async() => {
     setIsLoader(true);
-    axios({
-      method: "get",
-      url: configJSON?.baseUrl + configJSON?.hotMovers2EndPointURL,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => {
-        console.log({ res });
-        setIsLoader(false);
-        setFilterCoinData(res?.data?.data);
-      })
-      .catch((error) => {
-        setIsLoader(false);
-        console.log({ error });
-      });
+    try {
+      const data = await API_hot_mover2_data_get();
+      setFilterCoinData(data?.data);
+    } catch (error) {
+      console.log(error)
+    }finally{
+      setIsLoader(false);
+    }
+    // axios({
+    //   method: "get",
+    //   url: configJSON?.baseUrl + configJSON?.hotMovers2EndPointURL,
+    //   headers: {
+    //     "Access-Control-Allow-Origin": "*",
+    //     "Content-Type": "application/json",
+    //   },
+    // })
+    //   .then((res) => {
+    //     console.log({ res });
+    //     setIsLoader(false);
+    //     setFilterCoinData(res?.data?.data);
+    //   })
+    //   .catch((error) => {
+    //     setIsLoader(false);
+    //     console.log({ error });
+    //   });
   };
 
   useEffect(() => {

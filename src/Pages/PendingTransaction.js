@@ -17,7 +17,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { IsAuthenticated } from "../Utils/Auth";
 import { redux_setLogin } from "../redux-tools/userSlice";
 import Footer from "../Components/Footer";
-export const configJSON = require("../Pages/Config");
+import {
+  API_transaction_algrorand_main_pendding_get,
+  API_transaction_algrorand_test_pendding_get,
+} from "../Services/userAPI";
+ 
 
 const PendingTransaction = () => {
   const walletAddress = useSelector((state) => state.wallet.address);
@@ -27,34 +31,50 @@ const PendingTransaction = () => {
   const [pendingMainnetData, setPendingMainnetData] = useState([]);
   const [pendingTestnetData, setPendingTestnetData] = useState([]);
 
-  const getPendingMainnetData = () => {
-    axios({
-      method: "get",
-      url: `${configJSON?.baseUrl}${configJSON?.getPendingTransactionMainEndPointURL}G2G6LINUFCC4O4FSYTHLGEPSGEHSVSH7NFTZZE3Y5QIGAXARLN63PIC6JE/`,
-      // url: "http://34.202.125.96:8000/get_pending_transactions_main/G2G6LINUFCC4O4FSYTHLGEPSGEHSVSH7NFTZZE3Y5QIGAXARLN63PIC6JE/"
-    })
-      .then((res) => {
-        console.log("pending: Test", res);
-        setPendingMainnetData(res?.data?.pending_transactions);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  const getPendingMainnetData = async () => {
+    try {
+      const data = await API_transaction_algrorand_main_pendding_get(
+        walletAddress
+      );
+      setPendingMainnetData(data?.pending_transactions);
+    } catch (error) {
+      console.log(error);
+    }
+    // axios({
+    //   method: "get",
+    //   url: `${configJSON?.baseUrl}${configJSON?.getPendingTransactionMainEndPointURL}G2G6LINUFCC4O4FSYTHLGEPSGEHSVSH7NFTZZE3Y5QIGAXARLN63PIC6JE/`,
+    //   // url: "http://34.202.125.96:8000/get_pending_transactions_main/G2G6LINUFCC4O4FSYTHLGEPSGEHSVSH7NFTZZE3Y5QIGAXARLN63PIC6JE/"
+    // })
+    //   .then((res) => {
+    //     console.log("pending: Test", res);
+    //     setPendingMainnetData(res?.data?.pending_transactions);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   };
 
-  const getPendingTestnetData = () => {
-    axios({
-      method: "get",
-      url: `${configJSON?.baseUrl}${configJSON?.getPendingTransactionMainEndPointURL}G2G6LINUFCC4O4FSYTHLGEPSGEHSVSH7NFTZZE3Y5QIGAXARLN63PIC6JE/`,
-      // url: "http://34.202.125.96:8000/get_pending_transactions_test/G2G6LINUFCC4O4FSYTHLGEPSGEHSVSH7NFTZZE3Y5QIGAXARLN63PIC6JE/"
-    })
-      .then((res) => {
-        console.log("pending: Main", res);
-        setPendingTestnetData(res?.data?.pending_transactions);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  const getPendingTestnetData = async () => {
+    try {
+      const data = await API_transaction_algrorand_test_pendding_get(
+        walletAddress
+      );
+      setPendingTestnetData(data?.pending_transactions);
+    } catch (error) {
+      console.log(error);
+    }
+    // axios({
+    //   method: "get",
+    //   url: `${configJSON?.baseUrl}${configJSON?.getPendingTransactionMainEndPointURL}G2G6LINUFCC4O4FSYTHLGEPSGEHSVSH7NFTZZE3Y5QIGAXARLN63PIC6JE/`,
+    //   // url: "http://34.202.125.96:8000/get_pending_transactions_test/G2G6LINUFCC4O4FSYTHLGEPSGEHSVSH7NFTZZE3Y5QIGAXARLN63PIC6JE/"
+    // })
+    //   .then((res) => {
+    //     console.log("pending: Main", res);
+    //     setPendingTestnetData(res?.data?.pending_transactions);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   };
 
   const onHanleClickTab = (val) => {

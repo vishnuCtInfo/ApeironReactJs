@@ -9,7 +9,7 @@ import { redux_setLogin } from "../redux-tools/userSlice";
 import { IsAuthenticated } from "../Utils/Auth";
 import PieChart from "../Components/PieChart";
 import Footer from "../Components/Footer";
-export const configJSON = require("../Pages/Config");
+ 
 
 function AllTransaction() {
   const navigate = useNavigate();

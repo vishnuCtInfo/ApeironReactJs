@@ -16,66 +16,118 @@ import { IsAuthenticated } from "../Utils/Auth";
 import { useDispatch } from "react-redux";
 import CloseDropdown from "../Components/CloseDropdown";
 import Footer from "../Components/Footer";
-export const configJSON = require("../Pages/Config");
+import {
+  API_pool_data_get,
+  API_pool_for_pact_data_get,
+  API_support_vs_currency_get,
+} from "../Services/userAPI";
+ 
 
 const PoolsData = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [providerDefault, setProviderDefault] = useState("Pact");
+  const [providerDefault, setProviderDefault] = useState("Provider");
   const [filterCoinData, setFilterCoinData] = useState([]);
   const [isLoader, setIsLoader] = useState(false);
   const [dropdown, setDropdown] = useState(false);
   const [supportedData, setSupportedData] = useState();
 
-  const poolForPact = () => {
+  const poolForProvider = async () => {
     setIsLoader(true);
-    axios({
-      method: "get",
-      url: configJSON?.baseUrl + configJSON?.poolsForPactEndPointURL,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => {
-        setIsLoader(false);
-        console.log("pool ", res);
-        setFilterCoinData(res?.data);
-      })
-      .catch((error) => {
-        setIsLoader(false);
-        console.log("pool error", { error });
-        setFilterCoinData([]);
-      });
+    try {
+      const data = await API_pool_data_get();
+      setFilterCoinData(data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoader(false);
+    }
+    // axios({
+    //   method: "get",
+    //   url: configJSON?.baseUrl + configJSON?.poolsForProviderEndPointURL,
+    //   headers: {
+    //     "Access-Control-Allow-Origin": "*",
+    //     "Content-Type": "application/json",
+    //   },
+    // })
+    //   .then((res) => {
+    //     setIsLoader(false);
+    //     console.log("pool pro ", res);
+    //     setFilterCoinData(res?.data);
+    //   })
+    //   .catch((error) => {
+    //     setIsLoader(false);
+    //     console.log("pool error", { error });
+    //     setFilterCoinData([]);
+    //   });
   };
 
-  const poolForTinyman = () => {
+  const poolForPact = async () => {
     setIsLoader(true);
-    axios({
-      method: "get",
-      url: configJSON?.baseUrl + configJSON?.poolsForTinymanEndPointURL,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => {
-        setIsLoader(false);
-        console.log("pool ", res);
-        setFilterCoinData(res?.data);
-      })
-      .catch((error) => {
-        setIsLoader(false);
-        console.log("pool error", { error });
-        setFilterCoinData([]);
-      });
+    try {
+      const data = await API_pool_for_pact_data_get();
+      setFilterCoinData(data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoader(false);
+    }
+    // axios({
+    //   method: "get",
+    //   url: configJSON?.baseUrl + configJSON?.poolsForPactEndPointURL,
+    //   headers: {
+    //     "Access-Control-Allow-Origin": "*",
+    //     "Content-Type": "application/json",
+    //   },
+    // })
+    //   .then((res) => {
+    //     setIsLoader(false);
+    //     console.log("pool ", res);
+    //     setFilterCoinData(res?.data);
+    //   })
+    //   .catch((error) => {
+    //     setIsLoader(false);
+    //     console.log("pool error", { error });
+    //     setFilterCoinData([]);
+    //   });
+  };
+
+  const poolForTinyman = async() => {
+    setIsLoader(true); 
+    try {
+      const data = await API_pool_for_pact_data_get();
+      setFilterCoinData(data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoader(false);
+    }
+    // axios({
+    //   method: "get",
+    //   url: configJSON?.baseUrl + configJSON?.poolsForTinymanEndPointURL,
+    //   headers: {
+    //     "Access-Control-Allow-Origin": "*",
+    //     "Content-Type": "application/json",
+    //   },
+    // })
+    //   .then((res) => {
+    //     setIsLoader(false);
+    //     console.log("pool ", res);
+    //     setFilterCoinData(res?.data);
+    //   })
+    //   .catch((error) => {
+    //     setIsLoader(false);
+    //     console.log("pool error", { error });
+    //     setFilterCoinData([]);
+    //   });
   };
 
   const getCurrancyData = async () => {
     try {
-      const { data } = await axios.get(
-        configJSON.baseUrl + configJSON.SupportedVsCurrenciesEndPointURL
-      );
+      // const { data } = await axios.get(
+      //   configJSON.baseUrl + configJSON.SupportedVsCurrenciesEndPointURL
+      // );
+      const data = await API_support_vs_currency_get();
       console.log("suport", data);
       setSupportedData(data);
     } catch (error) {
@@ -95,8 +147,9 @@ const PoolsData = () => {
   }, []);
 
   useEffect(() => {
-    if (providerDefault === "Pact") return poolForPact();
-    if (providerDefault === "Tinyman") return poolForTinyman();
+    if (providerDefault === "Provider") poolForProvider();
+    if (providerDefault === "Pact") poolForPact();
+    if (providerDefault === "Tinyman") poolForTinyman();
   }, [providerDefault]);
 
   return (
@@ -123,6 +176,12 @@ const PoolsData = () => {
                       onClick={() => setDropdown(!dropdown)}
                       className="ct_options2"
                     >
+                      <li
+                        className="ct_option2"
+                        onClick={() => setProviderDefault(`Provider`)}
+                      >
+                        <span className="ct_option-text2">Provider</span>
+                      </li>
                       <li
                         className="ct_option2"
                         onClick={() => setProviderDefault(`Pact`)}
@@ -198,12 +257,14 @@ const PoolsData = () => {
                                   <tr>
                                     <td style={{ color: "#FFF" }}>{i + 1}</td>
                                     <td style={{ color: "#FFF" }}>
-                                      {item?.asset_1_id !== null &&
-                                        item?.asset_1_name}
+                                      {
+                                        // item?.asset_1_id !== null &&
+                                        item?.asset_1_name ?? item?.asset_1_id
+                                      }
                                       &nbsp; / &nbsp;
                                       {
                                         // item?.asset_2_id !== null &&
-                                        item?.asset_2_name
+                                        item?.asset_2_name ?? "ALGO"
                                       }
                                     </td>
                                     <td

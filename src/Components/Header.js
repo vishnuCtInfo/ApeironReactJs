@@ -1,24 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { Dropdown } from "react-bootstrap";
 import { useNavigate, NavLink, useLocation } from "react-router-dom";
-import axios from "axios";
 import { WalletConnectModalSign } from "@walletconnect/modal-sign-react";
 import { useDispatch, useSelector } from "react-redux";
-import { redux_setCoinsData } from "../redux-tools/coinSlice";
 import { redux_setLogin } from "../redux-tools/userSlice";
 import { IsAuthenticated } from "../Utils/Auth";
 import { DeflyWalletConnect } from "@blockshake/defly-connect";
 import { PeraWalletConnect } from "@perawallet/connect";
-import { redux_setApportunities } from "../redux-tools/apportunitySlice";
 import {
   redux_setDeflyWalletAddress,
   redux_setPeraWalletAddress,
-  redux_setWalletAddress,
-  redux_setWalletInformation,
 } from "../redux-tools/walletSlice";
 const projectId = "a9278b4293fadd62242e2f383fcb2f25";
 
-export const configJSON = require("../Pages/Config");
+ 
 
 const Header = () => {
   const location = useLocation();

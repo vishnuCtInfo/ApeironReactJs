@@ -17,9 +17,19 @@ import { redux_setLogin } from "../redux-tools/userSlice";
 import { Dropdown } from "react-bootstrap";
 import CloseDropdown from "../Components/CloseDropdown";
 import Footer from "../Components/Footer";
-export const configJSON = require("../Pages/Config");
+import {
+  API_DEX_Provider_data_get,
+  API_MXC_data_get,
+  API_assets_list_get,
+  API_binance_data_get,
+  API_coins_data,
+  API_kucoin_data_get,
+  API_trasaction_algorand_offical_assets_get,
+} from "../Services/userAPI";
+ 
 
 const Tokens = () => {
+  // debugger;
   const navigate = useNavigate();
 
   const [bitcoin, setBitcoin] = useState(false);
@@ -43,73 +53,6 @@ const Tokens = () => {
   const [kuCoinData, setKuCoinData] = useState([]);
   const [binacaCoinData, setBinacaCoinData] = useState([]);
 
-  const getProviderData = () => {
-    setIsLoader(true);
-    const data = {
-      currency: "usd",
-    };
-    axios({
-      method: "post",
-      url: configJSON.baseUrl + configJSON.ProviderEndPointURL,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Content-Type": "application/json",
-      },
-      data: data,
-    })
-      .then((res) => {
-        console.log('providers: ',res?.data)
-        setIsLoader(false);
-        setProviderData(res?.data);
-      })
-      .catch((err) => {
-        setIsLoader(false);
-        console.log({ err });
-      });
-  };
-
-  const getSelectedProvider = (item) => {
-    setProviderDefault(item?.name);
-    axios({
-      method: "get",
-      url:
-        configJSON.baseUrl +
-        `${configJSON.AssetsListEndPointURL}?provider=${item?.id}&currency=usd`,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => {
-        setSelectProviderData(res?.data);
-      })
-      .catch((err) => {
-        console.log({ err });
-      });
-  };
-
-  const onHandleGetData = () => {
-    setIsLoader(true);
-    axios({
-      method: "get",
-      url: configJSON?.baseUrl + configJSON?.GetCoinDataEndPointURL,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => {
-        setIsLoader(false);
-        console.log({ res });
-        setCoinData(res?.data);
-        setFilterCoinData(res?.data);
-      })
-      .catch((error) => {
-        setIsLoader(false);
-        console.log({ error });
-      });
-  };
-
   const onHandleBitcoinDropdown = () => {
     if (bitcoin == true) {
       setBitcoin(false);
@@ -124,7 +67,6 @@ const Tokens = () => {
       setOneD(true);
     }
   };
-
 
   const onHanldeFilterData = (event) => {
     setFilterData(event.target.value);
@@ -167,19 +109,25 @@ const Tokens = () => {
     }
   };
 
-  const getOfficialAssets = () => {
-    axios({
-      // url: "https://apeiron.finance:8000/transactionapi/algorand_offical_assets",
-      url: configJSON?.baseUrl + configJSON?.officialAssetsEndPointURL,
-      method: "get",
-    })
-      .then((res) => {
-        console.log({ res });
-        setOfficialAssets(res?.data?.algorand_assets);
-      })
-      .catch((err) => {
-        console.log({ err });
-      });
+  const getOfficialAssets = async () => {
+    try {
+      const data = await API_trasaction_algorand_offical_assets_get();
+      setOfficialAssets(data?.algorand_assets);
+    } catch (error) {
+      console.log(error);
+    }
+    // axios({
+    //   // url: "https://apeiron.finance:8000/transactionapi/algorand_offical_assets",
+    //   url: configJSON?.baseUrl + configJSON?.officialAssetsEndPointURL,
+    //   method: "get",
+    // })
+    //   .then((res) => {
+    //     console.log({ res });
+    //     setOfficialAssets(res?.data?.algorand_assets);
+    //   })
+    //   .catch((err) => {
+    //     console.log({ err });
+    //   });
   };
 
   const changeAssetsDropDownValue = (val) => {
@@ -202,46 +150,161 @@ const Tokens = () => {
     }
   };
 
-  const getMxcCoinData = () => {
-    axios({
-      // url: "https://apeiron.finance:8000/tokenapi/get_mxc_data",      
-      url: configJSON?.baseUrl + configJSON?.getMXCDataEndPointURL,
-      method: "get",
-    })
-      .then((res) => {
-        setMxcCoinData(res?.data?.data);
-      })
-      .catch((err) => {
-        console.log({ err });
-      });
+  const getMxcCoinData = async () => {
+    try {
+      const data = await API_MXC_data_get();
+      setMxcCoinData(data?.data);
+    } catch (error) {
+      console.log(error);
+    }
+    // axios({
+    //   // url: "https://apeiron.finance:8000/tokenapi/get_mxc_data",
+    //   url: configJSON?.baseUrl + configJSON?.getMXCDataEndPointURL,
+    //   method: "get",
+    // })
+    //   .then((res) => {
+    //     setMxcCoinData(res?.data?.data);
+    //   })
+    //   .catch((err) => {
+    //     console.log({ err });
+    //   });
   };
 
-  const getKuCoinData = () => {
-    axios({
-      // url: "https://apeiron.finance:8000/tokenapi/get_kucoin_data",     
-      url: configJSON?.baseUrl + configJSON?.getKuCoinDataEndPointURL,
-      method: "get",
-    })
-      .then((res) => {
-        setKuCoinData(res?.data?.data);
-      })
-      .catch((err) => {
-        console.log({ err });
-      });
+  const getKuCoinData = async () => {
+    try {
+      const data = await API_kucoin_data_get();
+      setKuCoinData(data?.data);
+      console.log("kucoin", data?.data);
+    } catch (error) {
+      console.log("kucoin", error);
+    }
+    // axios({
+    //   // url: "https://apeiron.finance:8000/tokenapi/get_kucoin_data",
+    //   url: configJSON?.baseUrl + configJSON?.getKuCoinDataEndPointURL,
+    //   method: "get",
+    // })
+    //   .then((res) => {
+    //     setKuCoinData(res?.data?.data);
+    //   })
+    //   .catch((err) => {
+    //     console.log({ err });
+    //   });
   };
 
-  const getBinacaCoinData = () => {
-    axios({
-      // url: "https://apeiron.finance:8000/tokenapi/get_binance_data",     
-      url: configJSON?.baseUrl + configJSON?.getBinanceDataEndPointURL,
-      method: "get",
-    })
-      .then((res) => {
-        setBinacaCoinData(res?.data?.data);
-      })
-      .catch((err) => {
-        console.log({ err });
+  const getBinacaCoinData = async () => {
+    try {
+      const data = await API_binance_data_get();
+      setBinacaCoinData(data?.data);
+      console.log("kucoin", data?.data);
+    } catch (error) {
+      console.log("kucoin", error);
+    }
+    // axios({
+    //   // url: "https://apeiron.finance:8000/tokenapi/get_binance_data",
+    //   url: configJSON?.baseUrl + configJSON?.getBinanceDataEndPointURL,
+    //   method: "get",
+    // })
+    //   .then((res) => {
+    //     setBinacaCoinData(res?.data?.data);
+    //   })
+    //   .catch((err) => {
+    //     console.log({ err });
+    //   });
+  };
+
+  const getProviderData = async () => {
+    setIsLoader(true);
+    try {
+      const res = await API_DEX_Provider_data_get({
+        currency: "usd",
       });
+      setProviderData(res);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoader(false);
+    }
+
+    // const data = {
+    //   currency: "usd",
+    // };
+    // axios({
+    //   method: "post",
+    //   url: configJSON.baseUrl + configJSON.ProviderEndPointURL,
+    //   headers: {
+    //     "Access-Control-Allow-Origin": "*",
+    //     "Content-Type": "application/json",
+    //   },
+    //   data: data,
+    // })
+    //   .then((res) => {
+    //     console.log("providers: ", res?.data);
+    //     setIsLoader(false);
+    //     setProviderData(res?.data);
+    //   })
+    //   .catch((err) => {
+    //     setIsLoader(false);
+    //     console.log({ err });
+    //   });
+  };
+
+  const getSelectedProvider = async (item) => {
+    setProviderDefault(item?.name);
+    console.log("assest");
+    try {
+      const data = await API_assets_list_get(item?.id);
+      setSelectProviderData(data);
+    } catch (error) {
+      console.log(error);
+    }
+    // axios({
+    //   method: "get",
+    //   url:
+    //     configJSON.baseUrl +
+    //     `${configJSON.AssetsListEndPointURL}?provider=${item?.id}&currency=usd`,
+    //   headers: {
+    //     "Access-Control-Allow-Origin": "*",
+    //     "Content-Type": "application/json",
+    //   },
+    // })
+    //   .then((res) => {
+    //     setSelectProviderData(res?.data);
+    //   })
+    //   .catch((err) => {
+    //     console.log({ err });
+    //   });
+  };
+
+  const onHandleGetData = async () => {
+    setIsLoader(true);
+    try {
+      const data = await API_coins_data();
+      setCoinData(data);
+      setFilterCoinData(data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoader(false);
+    }
+
+    // axios({
+    //   method: "get",
+    //   url: configJSON?.baseUrl + configJSON?.GetCoinDataEndPointURL,
+    //   headers: {
+    //     "Access-Control-Allow-Origin": "*",
+    //     "Content-Type": "application/json",
+    //   },
+    // })
+    //   .then((res) => {
+    //     setIsLoader(false);
+    //     console.log({ res });
+    //     setCoinData(res?.data);
+    //     setFilterCoinData(res?.data);
+    //   })
+    //   .catch((error) => {
+    //     setIsLoader(false);
+    //     console.log({ error });
+    //   });
   };
 
   const changeProviderDropDownValue = (val) => {
@@ -266,7 +329,6 @@ const Tokens = () => {
       dispatch(redux_setLogin(true));
     }
   }, []);
-
 
   return (
     <div className="body header-fixed is_dark">

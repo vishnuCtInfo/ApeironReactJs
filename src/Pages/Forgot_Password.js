@@ -1,54 +1,63 @@
 import React, { useEffect, useState } from "react";
-import logo_png from "../images/logo/logo.png";
-import logo_dark_png from "../images/logo/logo-dark.png";
+// import logo_png from "../images/logo/logo.png";
+// import logo_dark_png from "../images/logo/logo-dark.png";
 import "../Style/style.css";
 import { useNavigate } from "react-router-dom";
-import { message, message as MESSAGE } from "antd";
-import axios from "axios";
-import PeraWallet from "../images/layout/PeraWallet.png";
-import { PeraWalletConnect } from "@perawallet/connect";
-import { DeflyWalletConnect } from "@blockshake/defly-connect";
-import bitcoin2_png from "../images/layout/bitcoin2.png";
-import defly_logo from "../images/layout/DeflyWallet--circle-black.svg";
+import { message as MESSAGE } from "antd";
+// import axios from "axios";
+// import PeraWallet from "../images/layout/PeraWallet.png";
+// import { PeraWalletConnect } from "@perawallet/connect";
+// import { DeflyWalletConnect } from "@blockshake/defly-connect";
+// import bitcoin2_png from "../images/layout/bitcoin2.png";
+// import defly_logo from "../images/layout/DeflyWallet--circle-black.svg";
 import Header from "../Components/Header";
 import { useDispatch } from "react-redux";
 import { IsAuthenticated } from "../Utils/Auth";
 import { redux_setLogin } from "../redux-tools/userSlice";
 import Footer from "../Components/Footer";
+import { API_user_password_forgot } from "../Services/userAPI";
 
-export const configJSON = require("../Pages/Config");
+//  
 
 const Forgot_Password = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
+  const [loading, setloading] = useState(false);
 
-  const onHandleFormSubmit = (e) => {
+  const onHandleFormSubmit = async (e) => {
     e.preventDefault();
-    if (email) {
-      let formData = new FormData();
-      formData.append("email", email);
-      axios({
-        method: "post",
-        url: configJSON?.baseUrl + configJSON?.ForgotPasswordEndPointURL,
-        headers: { "content-type": "multipart/form-data" },
-        data: formData,
-      })
-        .then((res) => {
-          console.log({ res });
-          setEmail("");
-          if (res?.data?.success == true) {
-            MESSAGE.success(res?.data?.message, 2);
-          } else {
-            MESSAGE.error(res?.data?.message, 2);
-          }
-        })
-        .catch((error) => {
-          console.log({ error });
-          setEmail("");
-        });
-    } else {
-      MESSAGE.success("Please enter your email address", 2);
+    if (!email) return MESSAGE.error("Please enter your email address", 2);
+
+    let formData = new FormData();
+    formData.append("email", email);
+    setloading(true);
+    try {
+      const data = await API_user_password_forgot(formData);
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setloading(false);
     }
+    // axios({
+    //   method: "post",
+    //   url: configJSON?.baseUrl + configJSON?.ForgotPasswordEndPointURL,
+    //   headers: { "content-type": "multipart/form-data" },
+    //   data: formData,
+    // })
+    //   .then((res) => {
+    //     console.log({ res });
+    //     setEmail("");
+    //     if (res?.data?.success == true) {
+    //       MESSAGE.success(res?.data?.message, 2);
+    //     } else {
+    //       MESSAGE.error(res?.data?.message, 2);
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     console.log({ error });
+    //     setEmail("");
+    //   });
   };
 
   const dispatch = useDispatch();
@@ -126,8 +135,16 @@ const Forgot_Password = () => {
                         type="submit"
                         className="btn-action"
                         onClick={(e) => onHandleFormSubmit(e)}
+                        disabled={loading}
                       >
-                        Get Reset Password Link
+                        {loading ? (
+                          <div
+                            class="spinner-border text-light  me-2 "
+                            role="status"
+                          ></div>
+                        ) : (
+                          <span>Get Reset Password Link</span>
+                        )}
                       </button>
                     </form>
                   </div>

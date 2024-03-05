@@ -17,7 +17,13 @@ import { useDispatch } from "react-redux";
 import { IsAuthenticated } from "../Utils/Auth";
 import { redux_setLogin } from "../redux-tools/userSlice";
 import Footer from "../Components/Footer";
-export const configJSON = require("../Pages/Config");
+import {
+  API_transaction_algrorand_main_search,
+  API_transaction_algrorand_mainnet_data_get,
+  API_transaction_algrorand_testnet_data_get,
+  API_transaction_algrorand_testnet_search,
+} from "../Services/userAPI";
+ 
 
 const Transaction = () => {
   const navigate = useNavigate();
@@ -31,67 +37,92 @@ const Transaction = () => {
   const [testnetData, setTestnetData] = useState([]);
   const [searchTestnetData, setSearchTestnetData] = useState([]);
 
-  const getMainnetSearchData = (e) => {
-    setSearchValue(e.target.value);
-    axios({
-      method: "get",
-      url: `${configJSON?.baseUrl}${configJSON?.getAlgorandTransactionMainEndPointURL}${e.target.value}/`,
-      // url: `http://34.202.125.96:8000/get-algorand-transaction-main/${e.target.value}/`,
-    })
-      .then((res) => {
-        console.log(res?.data?.algorand_transactions);
-        setSearchMainnetData(res?.data?.algorand_transactions);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  const getMainnetSearchData = async (e) => {
+    const id = e.target.value;
+    setSearchValue(id);
+    try {
+      const data = await API_transaction_algrorand_main_search(id);
+      setSearchMainnetData(data?.algorand_transactions);
+    } catch (error) {
+      console.log(error);
+    }
+    // axios({
+    //   method: "get",
+    //   url: `${configJSON?.baseUrl}${configJSON?.getAlgorandTransactionMainEndPointURL}${e.target.value}/`,
+    //   // url: `http://34.202.125.96:8000/get-algorand-transaction-main/${e.target.value}/`,
+    // })
+    //   .then((res) => {
+    //     setSearchMainnetData(res?.data?.algorand_transaction);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   };
 
-  const getTestnetSearchData = (e) => {
-    setSearchValue2(e.target.value);
-    axios({
-      method: "get",
-      url: `${configJSON?.baseUrl}${configJSON?.getAlgorandTransactionTextEndPointURL}${e.target.value}/`,
-    })
-      .then((res) => {
-        console.log(res?.data?.algorand_transactions);
-        setSearchTestnetData(res?.data?.algorand_transactions);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  const getTestnetSearchData = async (e) => {
+    const id = e.target.value;
+    setSearchValue2(id);
+    try {
+      const data = await API_transaction_algrorand_testnet_search(id);
+      setSearchTestnetData(data?.algorand_transactions);
+    } catch (error) {
+      console.log(error);
+    }
+    // axios({
+    //   method: "get",
+    //   url: `${configJSON?.baseUrl}${configJSON?.getAlgorandTransactionTextEndPointURL}${e.target.value}/`,
+    // })
+    //   .then((res) => {
+    //     console.log(res?.data?.algorand_transactions);
+    //     setSearchTestnetData(res?.data?.algorand_transactions);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   };
 
-  const getMainnetData = () => {
-    axios({
-      method: "get",
-      url:
-        configJSON?.baseUrl +
-        configJSON?.getAlgorandTransactionMainnetEndPointURL,
-      // url: "http://34.202.125.96:8000/algorand_transaction_mainnet",
-    })
-      .then((res) => {
-        setMainnetData(res?.data?.algorand_transactions);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  const getMainnetData = async () => {
+    try {
+      const data = await API_transaction_algrorand_mainnet_data_get();
+      setMainnetData(data?.algorand_transactions);
+    } catch (error) {
+      console.log(error);
+    }
+    // axios({
+    //   method: "get",
+    //   url:
+    //     configJSON?.baseUrl +
+    //     configJSON?.getAlgorandTransactionMainnetEndPointURL,
+    //   // url: "http://34.202.125.96:8000/algorand_transaction_mainnet",
+    // })
+    //   .then((res) => {
+    //     setMainnetData(res?.data?.algorand_transactions);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   };
 
-  const getTestnetData = () => {
-    axios({
-      method: "get",
-      url:
-        configJSON?.baseUrl +
-        configJSON?.getAlgorandTransactionTestnetEndPointURL,
-      // url: "http://34.202.125.96:8000/algorand_transaction_testnet",
-    })
-      .then((res) => {
-        setTestnetData(res?.data?.algorand_transactions);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  const getTestnetData = async () => {
+    try {
+      const data = await API_transaction_algrorand_testnet_data_get();
+      setTestnetData(data?.algorand_transactions);
+    } catch (error) {
+      console.log(error);
+    }
+    // axios({
+    //   method: "get",
+    //   url:
+    //     configJSON?.baseUrl +
+    //     configJSON?.getAlgorandTransactionTestnetEndPointURL,
+    //   // url: "http://34.202.125.96:8000/algorand_transaction_testnet",
+    // })
+    //   .then((res) => {
+    //     setTestnetData(res?.data?.algorand_transactions);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   };
 
   const onHanleClickTab = (val) => {

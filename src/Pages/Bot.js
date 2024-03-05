@@ -15,7 +15,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { IsAuthenticated } from "../Utils/Auth";
 import { redux_setLogin } from "../redux-tools/userSlice";
 import Footer from "../Components/Footer";
-export const configJSON = require("../Pages/Config");
+import {
+  _BACKEND_BOT_CEX_TO_CEX_URL,
+  _BACKEND_BOT_DEX_OPP_END_GET_URL,
+  _BACKEND_BOT_DEX_TO_DEX_URL,
+} from "../Services/APIRoutes";
+ 
 
 const Bot = () => {
   let tvScriptLoadingPromise;
@@ -114,7 +119,7 @@ const Bot = () => {
     setCexBtn(true);
     try {
       const response = await axios.post(
-        "http://18.171.200.156:8000/" + configJSON.botCexToCexEndPointURL,
+        "http://18.171.200.156:8000/" + _BACKEND_BOT_CEX_TO_CEX_URL,
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
@@ -152,7 +157,7 @@ const Bot = () => {
 
     try {
       const { data } = await axios.get(
-        "http://18.171.200.156:8000/" + configJSON.getAppoEndPointURL
+        "http://18.171.200.156:8000/" + _BACKEND_BOT_DEX_OPP_END_GET_URL
       );
       console.log("get res: ", data);
       setGetData(data);
@@ -164,7 +169,7 @@ const Bot = () => {
     setDexBtn(true);
     try {
       const response = await axios.post(
-        configJSON.baseUrl + configJSON.botDexToDexEndPointURL,
+        configJSON.baseUrl + _BACKEND_BOT_DEX_TO_DEX_URL,
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
@@ -175,7 +180,6 @@ const Bot = () => {
       setDexBtn(false);
     }
   };
-
 
   useEffect(() => {
     onLoadScriptRef.current = createWidget;
