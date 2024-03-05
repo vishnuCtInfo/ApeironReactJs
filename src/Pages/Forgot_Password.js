@@ -1,15 +1,7 @@
 import React, { useEffect, useState } from "react";
-// import logo_png from "../images/logo/logo.png";
-// import logo_dark_png from "../images/logo/logo-dark.png";
 import "../Style/style.css";
 import { useNavigate } from "react-router-dom";
 import { message as MESSAGE } from "antd";
-// import axios from "axios";
-// import PeraWallet from "../images/layout/PeraWallet.png";
-// import { PeraWalletConnect } from "@perawallet/connect";
-// import { DeflyWalletConnect } from "@blockshake/defly-connect";
-// import bitcoin2_png from "../images/layout/bitcoin2.png";
-// import defly_logo from "../images/layout/DeflyWallet--circle-black.svg";
 import Header from "../Components/Header";
 import { useDispatch } from "react-redux";
 import { IsAuthenticated } from "../Utils/Auth";
@@ -17,9 +9,10 @@ import { redux_setLogin } from "../redux-tools/userSlice";
 import Footer from "../Components/Footer";
 import { API_user_password_forgot } from "../Services/userAPI";
 
-//  
+//
 
 const Forgot_Password = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [loading, setloading] = useState(false);
@@ -39,28 +32,8 @@ const Forgot_Password = () => {
     } finally {
       setloading(false);
     }
-    // axios({
-    //   method: "post",
-    //   url: configJSON?.baseUrl + configJSON?.ForgotPasswordEndPointURL,
-    //   headers: { "content-type": "multipart/form-data" },
-    //   data: formData,
-    // })
-    //   .then((res) => {
-    //     console.log({ res });
-    //     setEmail("");
-    //     if (res?.data?.success == true) {
-    //       MESSAGE.success(res?.data?.message, 2);
-    //     } else {
-    //       MESSAGE.error(res?.data?.message, 2);
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     console.log({ error });
-    //     setEmail("");
-    //   });
   };
 
-  const dispatch = useDispatch();
   useEffect(() => {
     const { token } = IsAuthenticated();
     console.log("token is : ", token);

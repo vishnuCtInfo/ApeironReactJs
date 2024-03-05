@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from "react";
-import logo_png from "../images/logo/logo.png";
-import logo_dark_png from "../images/logo/logo-dark.png";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import Header from "../Components/Header";
 import { useDispatch, useSelector } from "react-redux";
 import { redux_setLogin } from "../redux-tools/userSlice";
@@ -67,26 +64,7 @@ function AllTransaction() {
   });
 
 
-  // const onHandleGetData = () => {
-  //   axios({
-  //     method: "get",
-  //     url: configJSON?.baseUrl + configJSON?.GetCoinDataEndPointURL,
-  //     headers: {
-  //       "Access-Control-Allow-Origin": "*",
-  //       "Content-Type": "application/json",
-  //     },
-  //   })
-  //     .then((res) => {
-  //       console.log({ res });
-  //       setCoinData(res?.data);
-  //     })
-  //     .catch((error) => {
-  //       console.log({ error });
-  //     });
-  // };
-
   useEffect(() => {
-    // onHandleGetData();
     const { token } = IsAuthenticated();
     console.log("token is : ", token);
     if (token === null || token === undefined) {

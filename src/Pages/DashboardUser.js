@@ -1,17 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react'
-import logo_png from "../images/logo/logo.png"
-import logo_dark_png from "../images/logo/logo-dark.png"
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import Header from '../Components/Header';
 import { useDispatch, useSelector } from 'react-redux';
 import { message as toast } from 'antd';
-import { redux_setWalletInformation } from '../redux-tools/walletSlice';
 import { IsAuthenticated } from '../Utils/Auth';
 import { redux_setLogin } from '../redux-tools/userSlice';
 import PieChart from '../Components/PieChart';
 import Footer from '../Components/Footer';
- 
 
 function DashboardUser() {
 
@@ -20,7 +15,6 @@ function DashboardUser() {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const addRef = useRef();
 
   const [chartData, setChartData]=useState({Amount:9941881.2, Profit: 5070940.6 , Loss:62183})
   const [transactionChartSettings, setTransactionChartSettings] = useState({
@@ -50,9 +44,6 @@ function DashboardUser() {
     toast.success('copy address')
   }
 
-  // useEffect(() => {
-  //   getAccountInfo();
-  // }, [walletAddress])
 
   useEffect(() => {
     console.log('wallet info', walletInfo)

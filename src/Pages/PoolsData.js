@@ -1,15 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { PeraWalletConnect } from "@perawallet/connect";
-import { DeflyWalletConnect } from "@blockshake/defly-connect";
-import logo_png from "../images/logo/logo.png";
-import logo_dark_png from "../images/logo/logo-dark.png";
-import defly_logo from "../images/layout/DeflyWallet--circle-black.svg";
-import bitcoin2_png from "../images/layout/bitcoin2.png";
-import PeraWallet from "../images/layout/PeraWallet.png";
 import "../Style/style.css";
-import { useNavigate } from "react-router-dom";
-import { message, message as MESSAGE } from "antd";
-import axios from "axios";
 import Header from "../Components/Header";
 import { redux_setLogin } from "../redux-tools/userSlice";
 import { IsAuthenticated } from "../Utils/Auth";
@@ -21,10 +11,8 @@ import {
   API_pool_for_pact_data_get,
   API_support_vs_currency_get,
 } from "../Services/userAPI";
- 
 
 const PoolsData = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [providerDefault, setProviderDefault] = useState("Provider");
   const [filterCoinData, setFilterCoinData] = useState([]);
@@ -42,24 +30,6 @@ const PoolsData = () => {
     } finally {
       setIsLoader(false);
     }
-    // axios({
-    //   method: "get",
-    //   url: configJSON?.baseUrl + configJSON?.poolsForProviderEndPointURL,
-    //   headers: {
-    //     "Access-Control-Allow-Origin": "*",
-    //     "Content-Type": "application/json",
-    //   },
-    // })
-    //   .then((res) => {
-    //     setIsLoader(false);
-    //     console.log("pool pro ", res);
-    //     setFilterCoinData(res?.data);
-    //   })
-    //   .catch((error) => {
-    //     setIsLoader(false);
-    //     console.log("pool error", { error });
-    //     setFilterCoinData([]);
-    //   });
   };
 
   const poolForPact = async () => {
@@ -72,28 +42,10 @@ const PoolsData = () => {
     } finally {
       setIsLoader(false);
     }
-    // axios({
-    //   method: "get",
-    //   url: configJSON?.baseUrl + configJSON?.poolsForPactEndPointURL,
-    //   headers: {
-    //     "Access-Control-Allow-Origin": "*",
-    //     "Content-Type": "application/json",
-    //   },
-    // })
-    //   .then((res) => {
-    //     setIsLoader(false);
-    //     console.log("pool ", res);
-    //     setFilterCoinData(res?.data);
-    //   })
-    //   .catch((error) => {
-    //     setIsLoader(false);
-    //     console.log("pool error", { error });
-    //     setFilterCoinData([]);
-    //   });
   };
 
-  const poolForTinyman = async() => {
-    setIsLoader(true); 
+  const poolForTinyman = async () => {
+    setIsLoader(true);
     try {
       const data = await API_pool_for_pact_data_get();
       setFilterCoinData(data);
@@ -102,31 +54,10 @@ const PoolsData = () => {
     } finally {
       setIsLoader(false);
     }
-    // axios({
-    //   method: "get",
-    //   url: configJSON?.baseUrl + configJSON?.poolsForTinymanEndPointURL,
-    //   headers: {
-    //     "Access-Control-Allow-Origin": "*",
-    //     "Content-Type": "application/json",
-    //   },
-    // })
-    //   .then((res) => {
-    //     setIsLoader(false);
-    //     console.log("pool ", res);
-    //     setFilterCoinData(res?.data);
-    //   })
-    //   .catch((error) => {
-    //     setIsLoader(false);
-    //     console.log("pool error", { error });
-    //     setFilterCoinData([]);
-    //   });
   };
 
   const getCurrancyData = async () => {
     try {
-      // const { data } = await axios.get(
-      //   configJSON.baseUrl + configJSON.SupportedVsCurrenciesEndPointURL
-      // );
       const data = await API_support_vs_currency_get();
       console.log("suport", data);
       setSupportedData(data);

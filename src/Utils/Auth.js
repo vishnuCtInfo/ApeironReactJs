@@ -1,8 +1,5 @@
 
 export const setIsAuthenticated = ({ token, email, id }) => {
-    // console.log('token',token)
-    // console.log('email',email)
-    // console.log('id',id)
     localStorage.setItem('rb_t_access_token', token);
     localStorage.setItem('rb_t_access_email', email);
     localStorage.setItem('rb_t_access_id', id);

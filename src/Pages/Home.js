@@ -1,35 +1,9 @@
-import React, { useEffect, useState } from "react";
-import logo_png from "../images/logo/logo.png";
-import logo_dark_png from "../images/logo/logo-dark.png";
-import banner_02_png from "../images/layout/banner-02.png";
-import bitcoin_png from "../images/layout/bitcoin.png";
-import bitcoin2_png from "../images/layout/bitcoin2.png";
-import bitcoin3_png from "../images/layout/bitcoin3.png";
-import bitcoin4_png from "../images/layout/bitcoin4.png";
-import bitcoin5_png from "../images/layout/bitcoin5.png";
-import bitcoin7_png from "../images/layout/bitcoin7.png";
-import favicon_png from "../images/logo/favicon.png";
-import Illustration_png from "../images/layout/Illustration.png";
-import PeraWallet from "../images/layout/PeraWallet.png";
-import Cloud_png from "../images/icon/Cloud.png";
-import connect_line_png from "../images/icon/connect-line.png";
-import Wallet_png from "../images/icon/Wallet.png";
-import Mining_png from "../images/icon/Mining.png";
-import Comparison_png from "../images/icon/Comparison.png";
-import blog_01_jpg from "../images/blog/blog-01.jpg";
-import blog_02_jpg from "../images/blog/blog-02.jpg";
-import defly_logo from "../images/layout/DeflyWallet--circle-black.svg";
-import { PeraWalletConnect } from "@perawallet/connect";
-import { DeflyWalletConnect } from "@blockshake/defly-connect";
+import React, { useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import axios from "axios";
-import { WalletConnectModalSign } from "@walletconnect/modal-sign-react";
-import { Dropdown } from "react-bootstrap";
 import Header from "../Components/Header";
 import { useDispatch, useSelector } from "react-redux";
 import { IsAuthenticated } from "../Utils/Auth";
 import { redux_setLogin } from "../redux-tools/userSlice";
-import { redux_setCoinsData } from "../redux-tools/coinSlice";
 import Footer from "../Components/Footer";
 const projectId = "a9278b4293fadd62242e2f383fcb2f25";
  
@@ -75,7 +49,7 @@ const Home = () => {
             </div>
             <div className="col-xl-6 col-md-12">
               <div className="banner__image">
-                <img src={banner_02_png} alt="" />
+                <img src='/images/layout/banner-02.png' alt="" />
               </div>
             </div>
           </div>
@@ -90,7 +64,7 @@ const Home = () => {
                 <div className="crypto-box">
                   <div className="left">
                     <div className="ct_bitcoin_icon">
-                      <img src={bitcoin_png} alt="layout" />
+                      <img src='/images/layout/bitcoin.png' alt="layout" />
                     </div>
                     <h6>Bitcoin</h6>
                     <h6 className="price">USD 53,260.20</h6>
@@ -118,7 +92,7 @@ const Home = () => {
                 <div className="crypto-box">
                   <div className="left">
                     <div className="ct_bitcoin_icon">
-                      <img src={bitcoin2_png} alt="layout" />
+                      <img src='/images/layout/bitcoin2.png' alt="layout" />
                     </div>
                     <h6>Bitcoin</h6>
                     <h6 className="price">USD 53,260.20</h6>
@@ -146,7 +120,7 @@ const Home = () => {
                 <div className="crypto-box">
                   <div className="left">
                     <div className="ct_bitcoin_icon">
-                      <img src={bitcoin3_png} alt="layout" />
+                      <img src='/images/layout/bitcoin3.png' alt="layout" />
                     </div>
                     <h6>Bitcoin</h6>
                     <h6 className="price">USD 53,260.20</h6>
@@ -174,7 +148,7 @@ const Home = () => {
                 <div className="crypto-box">
                   <div className="left">
                     <div className="ct_bitcoin_icon">
-                      <img src={bitcoin4_png} alt="layout" />
+                      <img src='/images/layout/bitcoin4.png' alt="layout" />
                     </div>
                     <h6>Bitcoin</h6>
                     <h6 className="price">USD 53,260.20</h6>
@@ -443,7 +417,7 @@ const Home = () => {
           <div className="row">
             <div className="col-xl-6 col-md-12">
               <div className="about_image">
-                <img className="img-main" src={Illustration_png} alt="" />
+                <img className="img-main" src='/images/layout/Illustration.png' alt="" />
                 <div className="traders-box">
                   <div className="icon">
                     <svg
@@ -735,7 +709,7 @@ const Home = () => {
               >
                 <div className="work-box">
                   <div className="image">
-                    <img src={Cloud_png} alt="" />
+                    <img src='/images/icon/Cloud.png' alt="" />
                   </div>
                   <div className="content">
                     <p className="step">Step 1</p>
@@ -747,11 +721,11 @@ const Home = () => {
                       blocks built in React Native.
                     </p>
                   </div>
-                  <img className="line" src={connect_line_png} alt="" />
+                  <img className="line" src='/images/icon/connect-line.png' alt="" />
                 </div>
                 <div className="work-box">
                   <div className="image">
-                    <img src={Wallet_png} alt="" />
+                    <img src='/images/icon/Wallet.png' alt="" />
                   </div>
                   <div className="content">
                     <p className="step">Step 2</p>
@@ -763,11 +737,11 @@ const Home = () => {
                       blocks built in React Native.
                     </p>
                   </div>
-                  <img className="line" src={connect_line_png} alt="" />
+                  <img className="line" src='/images/icon/connect-line.png' alt="" />
                 </div>
                 <div className="work-box">
                   <div className="image">
-                    <img src={Mining_png} alt="" />
+                    <img src='/images/icon/Mining.png' alt="" />
                   </div>
                   <div className="content">
                     <p className="step">Step 3</p>
@@ -779,11 +753,11 @@ const Home = () => {
                       blocks built in React Native.
                     </p>
                   </div>
-                  <img className="line" src={connect_line_png} alt="" />
+                  <img className="line" src='/images/icon/connect-line.png' alt="" />
                 </div>
                 <div className="work-box">
                   <div className="image">
-                    <img src={Comparison_png} alt="" />
+                    <img src='/images/icon/Comparison.png' alt="" />
                   </div>
                   <div className="content">
                     <p className="step">Step 4</p>
@@ -818,7 +792,7 @@ const Home = () => {
             <div className="col-md-4">
               <div className="blog-box">
                 <div className="box-image">
-                  <img src={blog_01_jpg} alt="" />
+                  <img src='/images/blog/blog-01.jpg' alt="" />
                   <div className="wrap-video">
                     <a
                       href="https://www.youtube.com/watch?v=i7EMACWuErA"
@@ -862,7 +836,7 @@ const Home = () => {
             <div className="col-md-4">
               <div className="blog-box">
                 <div className="box-image">
-                  <img src={blog_02_jpg} alt="" />
+                  <img src='/images/blog/blog-02.jpg' alt="" />
                   <div className="wrap-video">
                     <a
                       href="https://www.youtube.com/watch?v=i7EMACWuErA"
@@ -906,7 +880,7 @@ const Home = () => {
             <div className="col-md-4">
               <div className="blog-box">
                 <div className="box-image">
-                  <img src={blog_02_jpg} alt="" />
+                  <img src='/images/blog/blog-02.jpg' alt="" />
                   <div className="wrap-video">
                     <a
                       href="https://www.youtube.com/watch?v=i7EMACWuErA"

@@ -1,25 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { PeraWalletConnect } from "@perawallet/connect";
-import { DeflyWalletConnect } from "@blockshake/defly-connect";
-import Core from "@walletconnect/core";
-import { Web3Wallet } from "@walletconnect/web3wallet";
-import logo_png from "../images/logo/logo.png";
-import logo_dark_png from "../images/logo/logo-dark.png";
-import defly_logo from "../images/layout/DeflyWallet--circle-black.svg";
-import bitcoin2_png from "../images/layout/bitcoin2.png";
-import PeraWallet from "../images/layout/PeraWallet.png";
 import "../Style/style.css";
 import { useNavigate } from "react-router-dom";
-import { message, message as MESSAGE } from "antd";
-import axios from "axios";
 import Header from "../Components/Header";
 import { IsAuthenticated } from "../Utils/Auth";
 import { redux_setLogin } from "../redux-tools/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import Footer from "../Components/Footer";
-import { API_minnet_account_info_get, API_testnet_account_info_get } from "../Services/userAPI";
- 
+import {
+  API_minnet_account_info_get,
+  API_testnet_account_info_get,
+} from "../Services/userAPI";
+
 const AccountInfo = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const walletAddress = useSelector((state) => state.wallet.address);
 
@@ -39,29 +32,12 @@ const AccountInfo = () => {
     } finally {
       setIsLoader(false);
     }
-
-    // axios({
-    //   method: "get",
-    //   url: `${configJSON?.baseUrl}${configJSON?.getAccountInfoMainnetEndPointURL}${walletAddress}/`,
-    //   // url: "http://34.202.125.96:8000/get-account-info-mainnet/G2G6LINUFCC4O4FSYTHLGEPSGEHSVSH7NFTZZE3Y5QIGAXARLN63PIC6JE",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    // })
-    //   .then((res) => {
-    //     console.log("account ", res);
-    //     setIsLoader(false);
-    //     setFilterCoinData(res?.data);
-    //   })
-    //   .catch((err) => {
-    //     setIsLoader(false);
-    //     console.log({ err });
-    //   });
   };
 
-  const getTestNetAccountData = async() => {
+  const getTestNetAccountData = async () => {
     setBbitcoin("Buy/Sell Arbitrage Opportunities");
-    setIsLoader(true); try {
+    setIsLoader(true);
+    try {
       const data = await API_testnet_account_info_get(walletAddress);
       setFilterCoinData(data);
     } catch (error) {
@@ -96,14 +72,12 @@ const AccountInfo = () => {
     }
   };
 
-  useEffect(()=>{
-    if(walletAddress){
+  useEffect(() => {
+    if (walletAddress) {
       getMainnetAccountData();
       getTestNetAccountData();
     }
-  },[walletAddress])
-
-  const dispatch = useDispatch();
+  }, [walletAddress]);
   useEffect(() => {
     const { token } = IsAuthenticated();
     console.log("token is : ", token);

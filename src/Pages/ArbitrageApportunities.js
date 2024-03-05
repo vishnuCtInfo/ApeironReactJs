@@ -1,17 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { PeraWalletConnect } from "@perawallet/connect";
-import { DeflyWalletConnect } from "@blockshake/defly-connect";
-import Core from "@walletconnect/core";
-import { Web3Wallet } from "@walletconnect/web3wallet";
-import logo_png from "../images/logo/logo.png";
-import logo_dark_png from "../images/logo/logo-dark.png";
-import defly_logo from "../images/layout/DeflyWallet--circle-black.svg";
-import bitcoin2_png from "../images/layout/bitcoin2.png";
-import PeraWallet from "../images/layout/PeraWallet.png";
 import "../Style/style.css";
 import { useNavigate } from "react-router-dom";
-import { message, message as MESSAGE } from "antd";
-import axios from "axios";
 import Header from "../Components/Header";
 import { useDispatch, useSelector } from "react-redux";
 import { IsAuthenticated } from "../Utils/Auth";
@@ -28,11 +17,8 @@ const ArbitrageApportunities = () => {
   const bbitcoin = useSelector((state) => state.apportunities.method);
 
   const [bitcoin, setBitcoin] = useState(false);
-  // const [bbitcoin, setBbitcoin] = useState("Alls");
-  // const [filterCoinData, setFilterCoinData] = useState([]);
   const [isLoader, setIsLoader] = useState(false);
   useEffect(() => {
-    // onHandleGetArbitrageApportunities();
     console.log('filter coins', filterCoinData)
     if(filterCoinData?.length){
       setIsLoader(false)
@@ -48,27 +34,6 @@ const ArbitrageApportunities = () => {
       setBitcoin(true);
     }
   };
-
-  // const onHandleGetArbitrageApportunities = () => {
-  //   setBbitcoin("Buy/Sell Arbitrage Opportunities");
-  //   setIsLoader(true);
-  //   axios({
-  //     method: "get",
-  //     url: configJSON?.baseUrl + configJSON?.ArbitrageApportunitiesEndPointURL,
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //   })
-  //     .then((res) => {
-  //       console.log({ res });
-  //       setIsLoader(false);
-  //       setFilterCoinData(res?.data);
-  //     })
-  //     .catch((err) => {
-  //       setIsLoader(false);
-  //       console.log({ err });
-  //     });
-  // };
 
   useEffect(() => {
     const { token } = IsAuthenticated();

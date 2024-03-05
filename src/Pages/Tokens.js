@@ -1,20 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { PeraWalletConnect } from "@perawallet/connect";
-import { DeflyWalletConnect } from "@blockshake/defly-connect";
-import logo_png from "../images/logo/logo.png";
-import logo_dark_png from "../images/logo/logo-dark.png";
-import defly_logo from "../images/layout/DeflyWallet--circle-black.svg";
-import bitcoin2_png from "../images/layout/bitcoin2.png";
-import PeraWallet from "../images/layout/PeraWallet.png";
 import "../Style/style.css";
-import { useNavigate } from "react-router-dom";
-import { message, message as MESSAGE } from "antd";
-import axios from "axios";
 import Header from "../Components/Header";
 import { useDispatch } from "react-redux";
 import { IsAuthenticated } from "../Utils/Auth";
 import { redux_setLogin } from "../redux-tools/userSlice";
-import { Dropdown } from "react-bootstrap";
 import CloseDropdown from "../Components/CloseDropdown";
 import Footer from "../Components/Footer";
 import {
@@ -29,9 +18,7 @@ import {
  
 
 const Tokens = () => {
-  // debugger;
-  const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   const [bitcoin, setBitcoin] = useState(false);
   const [bbitcoin, setBbitcoin] = useState("All");
   const [oned, setOneD] = useState(false);
@@ -313,7 +300,6 @@ const Tokens = () => {
     setAssetsDefault("Assets");
   };
 
-  const dispatch = useDispatch();
   useEffect(() => {
     onHandleGetData();
     getProviderData();

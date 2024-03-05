@@ -1,15 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { PeraWalletConnect } from "@perawallet/connect";
-import { DeflyWalletConnect } from "@blockshake/defly-connect";
-import logo_png from "../images/logo/logo.png";
-import logo_dark_png from "../images/logo/logo-dark.png";
-import defly_logo from "../images/layout/DeflyWallet--circle-black.svg";
-import bitcoin2_png from "../images/layout/bitcoin2.png";
-import PeraWallet from "../images/layout/PeraWallet.png";
+import React, { useEffect } from "react";
 import "../Style/style.css";
-import { useNavigate } from "react-router-dom";
-import { message, message as MESSAGE } from "antd";
-import axios from "axios";
 import Header from "../Components/Header";
 import { IsAuthenticated } from "../Utils/Auth";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,33 +9,9 @@ import Footer from "../Components/Footer";
 
 const HotCoins = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const [isLoader, setIsLoader] = useState(false);
-  // const [filterCoinData, setFilterCoinData] = useState([]);
   const filterCoinData = useSelector((state) => state.hot_movers.data);
 
-  // const getHotCoinsData = () => {
-  //   setIsLoader(true);
-  //   axios({
-  //     method: "get",
-  //     url: configJSON?.baseUrl + configJSON?.hotMoversEndPointEndPointURL,
-  //     headers: {
-  //       "Access-Control-Allow-Origin": "*",
-  //       "Content-Type": "application/json",
-  //     },
-  //   })
-  //     .then((res) => {
-  //       setIsLoader(false);
-  //       setFilterCoinData(res?.data);
-  //     })
-  //     .catch((error) => {
-  //       setIsLoader(false);
-  //       console.log({ error });
-  //     });
-  // };
-
   useEffect(() => {
-    // getHotCoinsData();
     const { token } = IsAuthenticated();
     console.log("token is : ", token);
     if (token === null || token === undefined) {

@@ -1,17 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { PeraWalletConnect } from "@perawallet/connect";
-import { DeflyWalletConnect } from "@blockshake/defly-connect";
-import logo_png from "../images/logo/logo.png";
-import logo_dark_png from "../images/logo/logo-dark.png";
-import bitcoin2_png from "../images/layout/bitcoin2.png";
-import defly_logo from "../images/layout/DeflyWallet--circle-black.svg";
-import PeraWallet from "../images/layout/PeraWallet.png";
-import blog_01_jpg from "../images/blog/blog-01.jpg";
-import favicon_png from "../images/logo/algo.png";
 import "../Style/style.css";
-import { useNavigate } from "react-router-dom";
-import { message, message as MESSAGE } from "antd";
-import axios from "axios";
 import Header from "../Components/Header";
 import { useDispatch } from "react-redux";
 import { IsAuthenticated } from "../Utils/Auth";
@@ -23,10 +11,8 @@ import {
   API_transaction_algrorand_testnet_data_get,
   API_transaction_algrorand_testnet_search,
 } from "../Services/userAPI";
- 
 
 const Transaction = () => {
-  const navigate = useNavigate();
   const [isTabMainnet, setIsTabMainnet] = useState(true);
   const [searchValue, setSearchValue] = useState("");
   const [searchValue2, setSearchValue2] = useState("");
@@ -46,17 +32,6 @@ const Transaction = () => {
     } catch (error) {
       console.log(error);
     }
-    // axios({
-    //   method: "get",
-    //   url: `${configJSON?.baseUrl}${configJSON?.getAlgorandTransactionMainEndPointURL}${e.target.value}/`,
-    //   // url: `http://34.202.125.96:8000/get-algorand-transaction-main/${e.target.value}/`,
-    // })
-    //   .then((res) => {
-    //     setSearchMainnetData(res?.data?.algorand_transaction);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
   };
 
   const getTestnetSearchData = async (e) => {
@@ -68,17 +43,6 @@ const Transaction = () => {
     } catch (error) {
       console.log(error);
     }
-    // axios({
-    //   method: "get",
-    //   url: `${configJSON?.baseUrl}${configJSON?.getAlgorandTransactionTextEndPointURL}${e.target.value}/`,
-    // })
-    //   .then((res) => {
-    //     console.log(res?.data?.algorand_transactions);
-    //     setSearchTestnetData(res?.data?.algorand_transactions);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
   };
 
   const getMainnetData = async () => {
@@ -88,19 +52,6 @@ const Transaction = () => {
     } catch (error) {
       console.log(error);
     }
-    // axios({
-    //   method: "get",
-    //   url:
-    //     configJSON?.baseUrl +
-    //     configJSON?.getAlgorandTransactionMainnetEndPointURL,
-    //   // url: "http://34.202.125.96:8000/algorand_transaction_mainnet",
-    // })
-    //   .then((res) => {
-    //     setMainnetData(res?.data?.algorand_transactions);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
   };
 
   const getTestnetData = async () => {
@@ -110,19 +61,6 @@ const Transaction = () => {
     } catch (error) {
       console.log(error);
     }
-    // axios({
-    //   method: "get",
-    //   url:
-    //     configJSON?.baseUrl +
-    //     configJSON?.getAlgorandTransactionTestnetEndPointURL,
-    //   // url: "http://34.202.125.96:8000/algorand_transaction_testnet",
-    // })
-    //   .then((res) => {
-    //     setTestnetData(res?.data?.algorand_transactions);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
   };
 
   const onHanleClickTab = (val) => {
@@ -292,7 +230,7 @@ const Transaction = () => {
                                       </td>
                                       <td>
                                         <img
-                                          src={favicon_png}
+                                          src="/images/logo/algo.png"
                                           alt="image"
                                           class="pe-1"
                                         />
@@ -326,7 +264,7 @@ const Transaction = () => {
                                       </td>
                                       <td>
                                         <img
-                                          src={favicon_png}
+                                          src="/images/logo/algo.png"
                                           alt="image"
                                           class="pe-1"
                                         />
@@ -375,7 +313,7 @@ const Transaction = () => {
                                       </td>
                                       <td>
                                         <img
-                                          src={favicon_png}
+                                          src="/images/logo/algo.png"
                                           alt="image"
                                           class="pe-1"
                                         />
@@ -417,7 +355,7 @@ const Transaction = () => {
                                       </td>
                                       <td>
                                         <img
-                                          src={favicon_png}
+                                          src="/images/logo/algo.png"
                                           alt="image"
                                           class="pe-1"
                                         />

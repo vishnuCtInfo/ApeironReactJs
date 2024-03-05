@@ -1,21 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
-import logo_png from "../images/logo/logo.png";
-import { PeraWalletConnect } from "@perawallet/connect";
-import { DeflyWalletConnect } from "@blockshake/defly-connect";
-import logo_dark_png from "../images/logo/logo-dark.png";
 import { useNavigate } from "react-router-dom";
-import PeraWallet from "../images/layout/PeraWallet.png";
-import bitcoin2_png from "../images/layout/bitcoin2.png";
-import defly_logo from "../images/layout/DeflyWallet--circle-black.svg";
 import axios from "axios";
 import { message as toast } from "antd";
 import Header from "../Components/Header";
-import { Dropdown } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { IsAuthenticated } from "../Utils/Auth";
 import { redux_setLogin } from "../redux-tools/userSlice";
 import Footer from "../Components/Footer";
 import {
+  _BACKEND_BASE_URL,
   _BACKEND_BOT_CEX_TO_CEX_URL,
   _BACKEND_BOT_DEX_OPP_END_GET_URL,
   _BACKEND_BOT_DEX_TO_DEX_URL,
@@ -55,48 +48,6 @@ const Bot = () => {
     amount: "",
   });
 
-  // useEffect(() => {
-  //     deflyWalletReconnectFunction()
-  //     peraWallet
-  //         .reconnectSession()
-  //         .then((accounts) => {
-  //             if (accounts.length) {
-  //                 setAccountAddress(accounts[0]);
-  //             }
-  //         })
-  //         .catch((e) => console.log(e));
-  //     const token = localStorage.getItem("token");
-  //     if (!token) {
-  //         setIsLogin(false)
-  //         navigate('/login');
-  //     }
-  //     else {
-  //         setIsLogin(true);
-  //     }
-  // }, [])
-
-  // const onHandleClickOnCheck = (val) => {
-  //     if (val == "Pact") {
-  //         if (isPact == true) {
-  //             setIsPact(false);
-  //         } else {
-  //             setIsPact(true);
-  //         }
-  //     } else if (val = "Tinyman") {
-  //         if (isTinyman == true) {
-  //             setIsTinyman(false);
-  //         } else {
-  //             setIsTinyman(true);
-  //         }
-  //     }
-  //     if (isPact == true && val == "Tinyman" && isTinyman == false) {
-  //         getArbitrageAportunity();
-  //     } else if (isTinyman == true && val == "Pact" && isPact == false) {
-  //         getArbitrageAportunity();
-  //     } else {
-  //         MESSAGE.error("Please select both check-box", 2)
-  //     }
-  // }
 
   const getCEX_botData = async () => {
     const formData = new FormData();
@@ -169,7 +120,7 @@ const Bot = () => {
     setDexBtn(true);
     try {
       const response = await axios.post(
-        configJSON.baseUrl + _BACKEND_BOT_DEX_TO_DEX_URL,
+        _BACKEND_BASE_URL + _BACKEND_BOT_DEX_TO_DEX_URL,
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
