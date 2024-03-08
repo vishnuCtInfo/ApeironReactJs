@@ -585,7 +585,7 @@ const Tokens = () => {
                 <div className="coin-list__main">
                   <div className="flat-tabs">
                     <div className="content-tab">
-                      <div className="content-inner ct_token_table">
+                      <div className="content-inner ct_token_table table-responsive">
                         <table className="table ">
                           <thead>
                             <tr>
@@ -627,8 +627,8 @@ const Tokens = () => {
                   <div className="coin-list__main">
                     <div className="flat-tabs">
                       <div className="content-tab">
-                        <div className="content-inner ct_token_table">
-                          <table className="table ">
+                        <div className="content-inner ct_token_table table-responsive">
+                          <table className="table  ">
                             <thead>
                               <tr>
                                 <th scope="col">#</th>
@@ -647,10 +647,10 @@ const Tokens = () => {
                                     ?.slice(0, 50)
                                     ?.map((item, i) => (
                                       <tr>
-                                        <td style={{ color: "#FFF" }}>
+                                        <td >
                                           {i + 1}
                                         </td>
-                                        <td style={{ color: "#FFF" }}>
+                                        <td >
                                           <div>
                                             <span>{item?.name}</span>{" "}
                                             <span className="unit">
@@ -660,7 +660,7 @@ const Tokens = () => {
                                         </td>
                                         <td
                                           className="boild"
-                                          style={{ color: "#FFF" }}
+                                          
                                         >
                                           ${item?.price.toFixed(6)}
                                         </td>
@@ -675,23 +675,23 @@ const Tokens = () => {
                                         )}
                                         <td
                                           className="boild"
-                                          style={{ color: "#FFF" }}
+                                          
                                         >
                                           {item?.tvl_stable.toFixed(6)}
                                         </td>
                                         <td
                                           className="boild"
-                                          style={{ color: "#FFF" }}
+                                          
                                         >
                                           {item?.tvl.toFixed(6)}
                                         </td>
                                         <td
                                           className="boild"
-                                          style={{ color: "#FFF" }}
+                                          
                                         >
                                           ${item?.volume24h.toFixed(6)}
                                         </td>
-                                        <td style={{ color: "#FFF" }}>
+                                        <td >
                                           <div
                                             id={`total-revenue-chart-${i + 1}`}
                                           ></div>
@@ -702,7 +702,7 @@ const Tokens = () => {
                                     (item, i) =>
                                       item?.name == bbitcoin && (
                                         <tr>
-                                          <td style={{ color: "#FFF" }}>
+                                          <td >
                                             {i + 1}
                                           </td>
                                           <td style={{ color: "#FFF" }}>
@@ -760,13 +760,14 @@ const Tokens = () => {
                     </div>
                   </div>
                 )}
+
               {isLoader == false &&
                 providerDefault !== "Providers" &&
                 defaltCoinMxc == "MXCDefault" && (
                   <div className="coin-list__main">
                     <div className="flat-tabs">
                       <div className="content-tab">
-                        <div className="content-inner ct_token_table">
+                        <div className="content-inner ct_token_table table-responsive">
                           <table className="table ">
                             <thead>
                               <tr>
@@ -832,7 +833,7 @@ const Tokens = () => {
                   <div className="coin-list__main">
                     <div className="flat-tabs">
                       <div className="content-tab">
-                        <div className="content-inner ct_token_table">
+                        <div className="content-inner ct_token_table table-responsive">
                           <table className="table ">
                             <thead>
                               <tr>
@@ -881,7 +882,7 @@ const Tokens = () => {
                   <div className="coin-list__main">
                     <div className="flat-tabs">
                       <div className="content-tab">
-                        <div className="content-inner ct_token_table">
+                        <div className="content-inner ct_token_table table-responsive">
                           <table className="table ">
                             <thead>
                               <tr>
@@ -930,7 +931,7 @@ const Tokens = () => {
                   <div className="coin-list__main">
                     <div className="flat-tabs">
                       <div className="content-tab">
-                        <div className="content-inner ct_token_table">
+                        <div className="content-inner ct_token_table table-responsive">
                           <table className="table ">
                             <thead>
                               <tr>

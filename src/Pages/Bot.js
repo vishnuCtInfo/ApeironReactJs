@@ -13,7 +13,9 @@ import {
   _BACKEND_BOT_DEX_OPP_END_GET_URL,
   _BACKEND_BOT_DEX_TO_DEX_URL,
 } from "../Services/APIRoutes";
- 
+
+import io from "socket.io-client";
+// const socket = io.connect("http://localhost:3001");
 
 const Bot = () => {
   let tvScriptLoadingPromise;
@@ -44,10 +46,8 @@ const Bot = () => {
   });
 
   const [dexData, setDexData] = useState({
-    mnemonic: "",
     amount: "",
   });
-
 
   const getCEX_botData = async () => {
     const formData = new FormData();
@@ -66,8 +66,6 @@ const Bot = () => {
     // data.append('api_key_huobi', '1cf4140c-1hrfj6yhgg-76c65352-c74d0');
     // data.append('secret_huobi', '07fc71d0-d59fbebd-47859775-ffbf3');
     // data.append('qty', '60');
-    localStorage.setItem("cex_bot", "true");
-    setCexBtn(true);
     try {
       const response = await axios.post(
         "http://18.171.200.156:8000/" + _BACKEND_BOT_CEX_TO_CEX_URL,
@@ -78,6 +76,8 @@ const Bot = () => {
       console.log("bot response", response);
       if (response?.data) {
         setGetCexData(response?.data);
+        localStorage.setItem("cex_bot", "true");
+        setCexBtn(true);
         return;
       } else {
         toast.error(
@@ -108,26 +108,28 @@ const Bot = () => {
 
     try {
       const { data } = await axios.get(
-        "http://18.171.200.156:8000/" + _BACKEND_BOT_DEX_OPP_END_GET_URL
+        _BACKEND_BASE_URL + _BACKEND_BOT_DEX_OPP_END_GET_URL
       );
       console.log("get res: ", data);
       setGetData(data);
     } catch (error) {
+      toast.error("server error");
       console.log(error);
     }
 
-    localStorage.setItem("dex_bot", "true");
-    setDexBtn(true);
     try {
       const response = await axios.post(
-        _BACKEND_BASE_URL + _BACKEND_BOT_DEX_TO_DEX_URL,
+        "http://18.171.200.156:8000/" + _BACKEND_BOT_DEX_TO_DEX_URL,
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
       // const response = '';
+      localStorage.setItem("dex_bot", "true");
+      setDexBtn(true);
       console.log(response);
     } catch (error) {
       console.log(error);
+      toast.error("bot server internal error");
       setDexBtn(false);
     }
   };
@@ -192,10 +194,45 @@ const Bot = () => {
     }
   }, []);
 
+
+  // const [isSocketConnected, setIsSocketConnected] = useState(false);
+  // const socket = io.connect("http://localhost:3001");
+  // useEffect(() => {
+  //   socket.on("connect", () => {
+  //     console.log("Socket connected.");
+  //     setIsSocketConnected(true);
+  //   });
+
+  //   socket.on("disconnect", () => {
+  //     console.log("Socket disconnected.");
+  //     setIsSocketConnected(false);
+  //   });
+
+  //   socket.on("receive_message", (data) => {
+  //     console.log("Received message:", data);
+  //   });
+  //   return () => {
+  //     socket.disconnect();
+  //   };
+  // }, []);
+  
+  // const joinRoom = ()=>{
+  //     socket.emit('join_room', { room: 1 });
+  //     console.log(`Joined room: 1`);
+  // }
+
+  // useEffect(() => {
+  //   console.log("Socket:", isSocketConnected);
+  // }, [isSocketConnected]);
+
   return (
     <div className="body header-fixed is_dark">
       <Header />
       <section className="pt-5">
+
+      {/* <button className="btn btn-success" onClick={joinRoom}>Click Me</button>
+      <br /> */}
+
         <div className="container-fluid">
           <div className="row">
             <div className="col-lg-7 mb-4">

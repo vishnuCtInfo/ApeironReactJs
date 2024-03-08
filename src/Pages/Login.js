@@ -14,8 +14,6 @@ import { Formik } from "formik";
 import { Schema_login_form } from "../Utils/yupSchema";
 import Footer from "../Components/Footer";
 
- 
-
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -26,11 +24,9 @@ const Login = () => {
   const loginUser = async (values, { resetForm }) => {
     setIsLoader(true);
     try {
-      const res = await API_user_login(values);
-      console.log("data: ", res?.data);
-      if (res?.data?.success == true) {
-        MESSAGE.success(res?.data?.message, 2);
-        const { data } = res;
+      const data = await API_user_login(values);
+      console.log("data: ", data);
+      if (data?.success == true) {
         const { access, user } = data;
         const { email, id } = user;
         setIsAuthenticated({ token: access, email, id });
@@ -38,7 +34,7 @@ const Login = () => {
         dispatch(redux_setLogin(true));
         navigate("/");
       } else {
-        MESSAGE.error(res?.data?.error || res?.data?.message);
+        MESSAGE.error(data?.error || data?.message);
       }
     } catch (error) {
       console.log(error);

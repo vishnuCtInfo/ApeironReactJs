@@ -3464,6 +3464,7 @@ body[data-magic-cursor="hide"] .mouse-cursor {
   gap: 30px;
   margin-top: 50px;
   margin-bottom: 25px;
+  flex-wrap: wrap;
 }
 .ct_srch_filter_input {
   position: relative;
@@ -9426,4 +9427,9 @@ top: -3px;
 
 .ct_bot_flex_11{
   margin-top: auto;
+}
+
+/* table text color */
+.ct_token_table tbody tr td span, .ct_token_table tbody tr td{
+  color:#fff;
 }

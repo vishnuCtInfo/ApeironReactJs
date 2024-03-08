@@ -66,7 +66,7 @@ const HotMovers2 = () => {
                   <div className="coin-list__main">
                     <div className="flat-tabs">
                       <div className="content-tab">
-                        <div className="content-inner ct_token_table">
+                        <div className="content-inner ct_token_table table-responsive">
                           <table className="table">
                             <thead>
                               <tr>

@@ -7,13 +7,12 @@ import { redux_setLogin } from "../redux-tools/userSlice";
 import { IsAuthenticated } from "../Utils/Auth";
 import { DeflyWalletConnect } from "@blockshake/defly-connect";
 import { PeraWalletConnect } from "@perawallet/connect";
+import styles from "./header.module.css";
 import {
   redux_setDeflyWalletAddress,
   redux_setPeraWalletAddress,
 } from "../redux-tools/walletSlice";
 const projectId = "a9278b4293fadd62242e2f383fcb2f25";
-
- 
 
 const Header = () => {
   const location = useLocation();
@@ -29,6 +28,8 @@ const Header = () => {
   const accountAddress = useSelector((state) => state.wallet.address);
   const isConnectedToPeraWallet = !!peraAccountAddress;
   const isConnectedToDeflyWallet = !!deflyAccountAddress;
+
+  const [NameL, setNameL] = useState("");
 
   // connect wallet
   const connectDeflyWallet = () => {
@@ -74,7 +75,6 @@ const Header = () => {
     peraWallet.disconnect();
   }
 
-
   //login handle
   const onClickLoginButton = () => {
     if (isLogin == true) {
@@ -87,7 +87,8 @@ const Header = () => {
   };
 
   useEffect(() => {
-    const { token } = IsAuthenticated();
+    const { token, email } = IsAuthenticated();
+    if (email) setNameL(email[0]?.toUpperCase());
     console.log("token is : ", token);
     if (token === null || token === undefined) {
       dispatch(redux_setLogin(false));
@@ -396,9 +397,22 @@ const Header = () => {
                       <Dropdown.Toggle
                         id="dropdown-basic"
                         style={{ backgroundColor: "#141416", border: "none" }}
-                        className="btn  dropdown-toggle ct_user_img"
+                        className={`btn  dropdown-toggle ct_user_img ${styles["dropdown-toggle"]}`}
                       >
-                        <img src="/images/icon/icon-01.png" width="90%" />
+                        <div
+                          className="p-1 d-flex"
+                          style={{
+                            borderRadius: "50%",
+                            backgroundColor: "#7B1FA2",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            width: "30px",
+                            height: "30px",
+                          }}
+                        >
+                          {NameL}
+                        </div>
+                        {/* <img src="/images/icon/icon-01.png" width="90%" /> */}
                       </Dropdown.Toggle>
 
                       <Dropdown.Menu>
