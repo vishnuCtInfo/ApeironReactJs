@@ -15,7 +15,6 @@ import {
 } from "../Services/APIRoutes";
 
 import io from "socket.io-client";
-// const socket = io.connect("http://localhost:3001");
 
 const Bot = () => {
   let tvScriptLoadingPromise;
@@ -198,27 +197,28 @@ const Bot = () => {
   // const [isSocketConnected, setIsSocketConnected] = useState(false);
   // const socket = io.connect("http://localhost:3001");
   // useEffect(() => {
-  //   socket.on("connect", () => {
+  //   socket?.on("connect", () => {
   //     console.log("Socket connected.");
   //     setIsSocketConnected(true);
   //   });
 
-  //   socket.on("disconnect", () => {
+  //   socket?.on("disconnect", () => {
   //     console.log("Socket disconnected.");
   //     setIsSocketConnected(false);
   //   });
 
-  //   socket.on("receive_message", (data) => {
+  //   socket?.on("receive_message", (data) => {
   //     console.log("Received message:", data);
   //   });
   //   return () => {
-  //     socket.disconnect();
+  //     socket?.disconnect();
   //   };
   // }, []);
   
   // const joinRoom = ()=>{
-  //     socket.emit('join_room', { room: 1 });
-  //     console.log(`Joined room: 1`);
+  //   if(isSocketConnected){
+  //     socket?.emit('join_room', { room: 1 });
+  //     console.log(`Joined room: 1`);}
   // }
 
   // useEffect(() => {
