@@ -67,7 +67,7 @@ const Bot = () => {
     // data.append('qty', '60');
     try {
       const response = await axios.post(
-        "http://18.171.200.156:8000/" + _BACKEND_BOT_CEX_TO_CEX_URL,
+        "https://18.171.200.156:8000/" + _BACKEND_BOT_CEX_TO_CEX_URL,
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
@@ -115,10 +115,9 @@ const Bot = () => {
       toast.error("server error");
       console.log(error);
     }
-
     try {
       const response = await axios.post(
-        "http://18.171.200.156:8000/" + _BACKEND_BOT_DEX_TO_DEX_URL,
+        "https://apeiron.finance:8000/" + _BACKEND_BOT_DEX_TO_DEX_URL,
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
@@ -193,7 +192,6 @@ const Bot = () => {
     }
   }, []);
 
-
   // const [isSocketConnected, setIsSocketConnected] = useState(false);
   // const socket = io.connect("http://localhost:3001");
   // useEffect(() => {
@@ -214,7 +212,7 @@ const Bot = () => {
   //     socket?.disconnect();
   //   };
   // }, []);
-  
+
   // const joinRoom = ()=>{
   //   if(isSocketConnected){
   //     socket?.emit('join_room', { room: 1 });
@@ -229,8 +227,7 @@ const Bot = () => {
     <div className="body header-fixed is_dark">
       <Header />
       <section className="pt-5">
-
-      {/* <button className="btn btn-success" onClick={joinRoom}>Click Me</button>
+        {/* <button className="btn btn-success" onClick={joinRoom}>Click Me</button>
       <br /> */}
 
         <div className="container-fluid">

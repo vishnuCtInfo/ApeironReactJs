@@ -1,73 +1,79 @@
-import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom';
-import Header from '../Components/Header';
-import { useDispatch, useSelector } from 'react-redux';
-import { message as toast } from 'antd';
-import { IsAuthenticated } from '../Utils/Auth';
-import { redux_setLogin } from '../redux-tools/userSlice';
-import PieChart from '../Components/PieChart';
-import Footer from '../Components/Footer';
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Header from "../Components/Header";
+import { useDispatch, useSelector } from "react-redux";
+import { message as toast } from "antd";
+import { IsAuthenticated } from "../Utils/Auth";
+import { redux_setLogin } from "../redux-tools/userSlice";
+import PieChart from "../Components/PieChart";
+import Footer from "../Components/Footer";
 
 function DashboardUser() {
-
-  const walletAddress = useSelector(state => state?.wallet?.address)
-  const walletInfo = useSelector(state => state?.wallet?.info)
+  const walletAddress = useSelector((state) => state?.wallet?.address);
+  const walletInfo = useSelector((state) => state?.wallet?.info);
+  const [userProfile, setUserProfile] = useState(null);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [chartData, setChartData]=useState({Amount:9941881.2, Profit: 5070940.6 , Loss:62183})
+  const [chartData, setChartData] = useState({
+    Amount: 9941881.2,
+    Profit: 5070940.6,
+    Loss: 62183,
+  });
   const [transactionChartSettings, setTransactionChartSettings] = useState({
-    type: 'pie',
+    type: "pie",
     data: {
-      labels: ['Amount', 'Profit', 'Loss'],
-      datasets: [{
-        data: [chartData?.Amount, chartData?.Profit, chartData?.Loss],
-        backgroundColor: ['#4814B8', '#00C013', '#d50000'],
-      }],
+      labels: ["Amount", "Profit", "Loss"],
+      datasets: [
+        {
+          data: [chartData?.Amount, chartData?.Profit, chartData?.Loss],
+          backgroundColor: ["#4814B8", "#00C013", "#d50000"],
+        },
+      ],
     },
     options: {
       plugins: {
         legend: {
           display: false,
-          position: 'bottom',
+          position: "bottom",
           labels: {
             usePointStyle: true,
           },
         },
       },
     },
-  })
+  });
 
   const handleCopyAddress = () => {
-    navigator.clipboard.writeText(walletInfo?.wallet_address)
-    toast.success('copy address')
-  }
-
-
-  useEffect(() => {
-    console.log('wallet info', walletInfo)
-  })
+    navigator.clipboard.writeText(walletInfo?.wallet_address);
+    toast.success("copy address");
+  };
 
   useEffect(() => {
-    const { token } = IsAuthenticated();
-    console.log('token is : ', token)
-    if (token === null || token === undefined) {
-      dispatch(redux_setLogin(false))
-      navigate('/login')
-    } else {
-      dispatch(redux_setLogin(true))
+    console.log("wallet info", walletInfo);
+  });
+
+  useEffect(() => {
+    const { token, email } = IsAuthenticated();
+    if (email) {
+      setUserProfile({ email });
     }
-  }, [])
+    console.log("token is : ", token);
+    if (token === null || token === undefined) {
+      dispatch(redux_setLogin(false));
+      navigate("/login");
+    } else {
+      dispatch(redux_setLogin(true));
+    }
+  }, []);
 
   return (
     <div>
       <Header />
 
       <section className="coin-list mt-5 pt-5">
-
         <div className="container mt-5">
-
           <div className="row">
             <div className="col-md-12">
               {/* <div className="block-text d-flex align-items-center justify-content-between gap-4 flex-wrap">
@@ -112,19 +118,33 @@ function DashboardUser() {
               </div> */}
               <div className="d-flex align-items-center gap-3 mb-4">
                 <div className="ct_profile_pic">
-                  <h4>KA</h4>
+                  <h4>
+                    {userProfile?.email &&
+                      (
+                        userProfile?.email[0] + userProfile?.email[1]
+                      ).toUpperCase()}
+                  </h4>
                 </div>
                 <div className="ct_profile_info">
-                  <h3>Hello, ka**@**.com</h3>
+                  <h3>
+                    Hello,{" "}
+                    {`${userProfile?.email.split("@")[0].slice(0, 2)}**@**${
+                      userProfile?.email.split("gmail")[1]
+                    }`}
+                  </h3>
                 </div>
               </div>
               <div className="d-flex align-items-center gap-4 pb-5 flex-wrap">
-
                 <div className="ct_address_info">
                   <h5>Address</h5>
 
-                  <h4 role='button' className="ct_fs_16" onClick={handleCopyAddress}>
-                    {walletInfo && walletInfo?.wallet_address?.slice(0, 10) + '...'}
+                  <h4
+                    role="button"
+                    className="ct_fs_16"
+                    onClick={handleCopyAddress}
+                  >
+                    {walletInfo &&
+                      walletInfo?.wallet_address?.slice(0, 10) + "..."}
                     <i className="fa-regular fa-copy ms-2"></i>
                   </h4>
                 </div>
@@ -134,7 +154,10 @@ function DashboardUser() {
                 </div>
                 <div className="ct_address_info">
                   <h5>Last Login</h5>
-                  <h4 className="ct_fs_16"><span>2/19/2024, 13:34:00</span> <span>Australia Melbourne(185.**.141)</span></h4>
+                  <h4 className="ct_fs_16">
+                    <span>2/19/2024, 13:34:00</span>{" "}
+                    <span>Australia Melbourne(185.**.141)</span>
+                  </h4>
                 </div>
               </div>
 
@@ -142,17 +165,25 @@ function DashboardUser() {
                 <p>Total Assets</p>
                 <div className="d-flex align-items-center gap-3 mt-4">
                   {/* <div className="ct_dropdown active"> */}
-                  {
-                    walletInfo?.wallet_amount ?
-                      <>
-                        <h5 className='d-flex align-items-center'>{((walletInfo?.wallet_amount / 1000000) / 5.12)?.toFixed(2)} <span style={{ fontSize: '80%' }}>USD</span> </h5>
-                        <p>
-                          ≈  ₨ {(((walletInfo?.wallet_amount / 1000000) / 5.12) * 82.88)?.toFixed(2)}
-                        </p>
-                      </>
-                      :
-                      ''
-                  }
+                  {walletInfo?.wallet_amount ? (
+                    <>
+                      <h5 className="d-flex align-items-center">
+                        {(walletInfo?.wallet_amount / 1000000 / 5.12)?.toFixed(
+                          2
+                        )}{" "}
+                        <span style={{ fontSize: "80%" }}>USD</span>{" "}
+                      </h5>
+                      <p>
+                        ≈ ₨{" "}
+                        {(
+                          (walletInfo?.wallet_amount / 1000000 / 5.12) *
+                          82.88
+                        )?.toFixed(2)}
+                      </p>
+                    </>
+                  ) : (
+                    ""
+                  )}
 
                   {/* <h6>{walletAddress?.total_assets_opted_in ?? 0} USDT
                       <span><i className="fa-solid fa-sort-down"></i></span>
@@ -170,12 +201,7 @@ function DashboardUser() {
                 </div>
               </div>
 
-
-
-              <div>
-
-
-              </div>
+              <div></div>
               <div className="mt-4">
                 <h6>History</h6>
                 <div className=" mt-4">
@@ -192,48 +218,72 @@ function DashboardUser() {
                             <h5 className="mb-0">1</h5>
                           </div>
                         </div>
-
                       </div>
                       <div className="col-md-7">
                         <ul className="d-flex align-items-center gap-3 justify-content-end">
                           <li>
-                            <p className="d-flex align-items-center gap-2"><span className="ct_dot ct_blue_dot"></span>Amount</p>
+                            <p className="d-flex align-items-center gap-2">
+                              <span className="ct_dot ct_blue_dot"></span>Amount
+                            </p>
                             <h6 className="ct_fs_16 mb-0">9,070,940.6</h6>
                           </li>
                           <li>
-                            <p className="d-flex align-items-center gap-2"><span className="ct_dot ct_green_dot"></span>Profit</p>
+                            <p className="d-flex align-items-center gap-2">
+                              <span className="ct_dot ct_green_dot"></span>
+                              Profit
+                            </p>
                             <h6 className="ct_fs_16  mb-0">4,070,940.6</h6>
                           </li>
                           <li>
-                            <p className="d-flex align-items-center gap-2"><span className="ct_dot ct_red_dot"></span>Loss</p>
+                            <p className="d-flex align-items-center gap-2">
+                              <span className="ct_dot ct_red_dot"></span>Loss
+                            </p>
                             <h6 className="ct_fs_16 mb-0">940.6</h6>
                           </li>
                         </ul>
                       </div>
-
                     </div>
                   </div>
 
-                  <div className="progress ct_progress" style={{ height: '10px' }}>
-                    <div className="progress-bar" role="progressbar" style={{ width: '70%', backgroundColor: '#3B82F6', height: '10px' }}>
-
-                    </div>
-                    <div className="progress-bar " role="progressbar" style={{ width: '15%', backgroundColor: '#00C013', height: '10px' }}>
-
-                    </div>
-                    <div className="progress-bar" role="progressbar" style={{ width: '15%', backgroundColor: '#D50000', height: '10px' }}>
-                    </div>
+                  <div
+                    className="progress ct_progress"
+                    style={{ height: "10px" }}
+                  >
+                    <div
+                      className="progress-bar"
+                      role="progressbar"
+                      style={{
+                        width: "70%",
+                        backgroundColor: "#3B82F6",
+                        height: "10px",
+                      }}
+                    ></div>
+                    <div
+                      className="progress-bar "
+                      role="progressbar"
+                      style={{
+                        width: "15%",
+                        backgroundColor: "#00C013",
+                        height: "10px",
+                      }}
+                    ></div>
+                    <div
+                      className="progress-bar"
+                      role="progressbar"
+                      style={{
+                        width: "15%",
+                        backgroundColor: "#D50000",
+                        height: "10px",
+                      }}
+                    ></div>
                   </div>
                 </div>
               </div>
-
 
               {/* ---------------bot analysis-------------------- */}
               <div className="pt-5">
                 <h4 className="ct_fs_28">Bot Analysis</h4>
                 <div className="ct_filter_aria_main mt-4 justify-content-between">
-
-
                   <div className="ct_srch_filter_input">
                     <input type="text" className="form-control" />
                     <i className="fa-solid fa-magnifying-glass"></i>
@@ -244,27 +294,34 @@ function DashboardUser() {
                       <option value="">DEX to DEX</option>
                     </select>
                   </div>
-
                 </div>
               </div>
 
               <div className="coin-list__main ">
                 <div className="d-flex align-items-center gap-3 flex-wrap">
                   <div>
-                    <label for="" className="me-2">From</label>
+                    <label for="" className="me-2">
+                      From
+                    </label>
                     <input type="date" className="ct_custom_select" />
                   </div>
                   <div>
-                    <label for="" className="me-2">To</label>
+                    <label for="" className="me-2">
+                      To
+                    </label>
                     <input type="date" className="ct_custom_select" />
                   </div>
                   <div>
-                    <label for="" className="me-2">From</label>
+                    <label for="" className="me-2">
+                      From
+                    </label>
 
                     <input type="time" className="ct_custom_select" />
                   </div>
                   <div>
-                    <label for="" className="me-2">To</label>
+                    <label for="" className="me-2">
+                      To
+                    </label>
                     <input type="time" className="ct_custom_select" />
                   </div>
                 </div>
@@ -289,17 +346,20 @@ function DashboardUser() {
                                 <th scope="col">Fee Currency</th>
                                 <th scope="col">Profit</th>
                                 <th scope="col">Loss</th>
-
                               </tr>
                             </thead>
 
-                            {!walletAddress ?
+                            {!walletAddress ? (
                               <tbody>
                                 <tr>
-                                  <td colspan="13" className="text-center"><p className="mb-0 ct_fs_20 text-white ">Not data Found</p></td>
+                                  <td colspan="13" className="text-center">
+                                    <p className="mb-0 ct_fs_20 text-white ">
+                                      Not data Found
+                                    </p>
+                                  </td>
                                 </tr>
                               </tbody>
-                              :
+                            ) : (
                               <tbody>
                                 <tr>
                                   <td>#</td>
@@ -313,7 +373,13 @@ function DashboardUser() {
                                   <td>5.3295</td>
                                   <td>0.0053295</td>
                                   <td>USDT</td>
-                                  <td className="up">0.12 <i className="fa-solid fa-sort-up" style={{ verticalAlign: 'middle' }}></i></td>
+                                  <td className="up">
+                                    0.12{" "}
+                                    <i
+                                      className="fa-solid fa-sort-up"
+                                      style={{ verticalAlign: "middle" }}
+                                    ></i>
+                                  </td>
                                   <td>0.004</td>
                                 </tr>
                                 <tr>
@@ -329,10 +395,16 @@ function DashboardUser() {
                                   <td>0.0053295</td>
                                   <td>USDT</td>
                                   <td>0.00 </td>
-                                  <td className="down">0.36<i className="fa-solid fa-sort-up" style={{ verticalAlign: 'middle' }}></i></td>
+                                  <td className="down">
+                                    0.36
+                                    <i
+                                      className="fa-solid fa-sort-up"
+                                      style={{ verticalAlign: "middle" }}
+                                    ></i>
+                                  </td>
                                 </tr>
                               </tbody>
-                            }
+                            )}
                           </table>
                         </div>
                       </div>
@@ -343,10 +415,8 @@ function DashboardUser() {
                       <PieChart settings={transactionChartSettings} />
                     </div>
                   </div>
-
                 </div>
               </div>
-
             </div>
           </div>
         </div>
@@ -354,7 +424,7 @@ function DashboardUser() {
 
       <Footer />
     </div>
-  )
+  );
 }
 
-export default DashboardUser
+export default DashboardUser;
