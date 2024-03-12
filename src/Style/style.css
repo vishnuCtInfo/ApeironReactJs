@@ -9433,3 +9433,7 @@ top: -3px;
 .ct_token_table tbody tr td span, .ct_token_table tbody tr td{
   color:#fff;
 }
+
+.header {
+  z-index: 1010;
+}

@@ -15,17 +15,20 @@ import {
 } from "../Services/APIRoutes";
 
 import io from "socket.io-client";
+const socket = io.connect("http://192.168.1.37:8000");
+// const socket = new WebSocket('ws://192.168.1.37'); // Replace with your actual WebSocket server URL
 
 const Bot = () => {
   let tvScriptLoadingPromise;
   const navigate = useNavigate();
+  const cexBotRef = useRef(null);
 
   const onLoadScriptRef = useRef();
 
   const dispatch = useDispatch();
   const walletAddress = useSelector((state) => state.wallet.address);
   const [getData, setGetData] = useState();
-  const [getCexData, setGetCexData] = useState();
+  const [getCexData, setGetCexData] = useState([]);
 
   const [cexBtn, setCexBtn] = useState(
     localStorage.getItem("cex_bot") || false
@@ -48,6 +51,22 @@ const Bot = () => {
     amount: "",
   });
 
+  const stopCEX_botData = async () => {
+    try {
+      localStorage.removeItem("cex_bot");
+      setCexBtn(false);
+      const response = await axios.post(
+        { key: undefined },
+        { headers: { "Content-Type": "multipart/form-data" } }
+      );
+    } catch (error) {
+      console.log(error);
+      toast.success("bot stop successfully.");
+      localStorage.removeItem("cex_bot");
+      setCexBtn(false);
+    }
+  };
+
   const getCEX_botData = async () => {
     const formData = new FormData();
     if (!cexData?.api_key_binance) return toast.error("Enter binance key");
@@ -59,13 +78,48 @@ const Bot = () => {
     for (const key in cexData) {
       formData.append(key, cexData[key]);
     }
-    // let data = new FormData();
-    // data.append('api_key_binance', 'DZE3RSZvdPJcmsVZLehkc7SqyfX8fKQqtEz9CnSaibARorrV7QHBb2VWesTnW722');
-    // data.append('secret_binance', 'bBcaH4GfGRUg58QnXEz9YqFuLo1EpxRTkLy6ShKaoQbp6p3d7unZkCK59UH4btCP');
-    // data.append('api_key_huobi', '1cf4140c-1hrfj6yhgg-76c65352-c74d0');
-    // data.append('secret_huobi', '07fc71d0-d59fbebd-47859775-ffbf3');
-    // data.append('qty', '60');
+    // let formData = new FormData();
+    // formData.append(
+    //   "api_key_binance",
+    //   "DZE3RSZvdPJcmsVZLehkc7SqyfX8fKQqtEz9CnSaibARorrV7QHBb2VWesTnW722"
+    // );
+    // formData.append(
+    //   "secret_binance",
+    //   "bBcaH4GfGRUg58QnXEz9YqFuLo1EpxRTkLy6ShKaoQbp6p3d7unZkCK59UH4btCP"
+    // );
+    // formData.append("api_key_huobi", "1cf4140c-1hrfj6yhgg-76c65352-c74d0");
+    // formData.append("secret_huobi", "07fc71d0-d59fbebd-47859775-ffbf3");
+    // formData.append("qty", "60");
     try {
+      //call socket
+
+      const handleConsoleData = (data) => {
+        console.log("cex data: ", data);
+        let newData;
+        if (data?.binance_ask) {
+          newData = {
+            huobi_ask: data.huobi_ask,
+            binance_ask: data.binance_ask,
+            total_spent: data.total_spent,
+            total_earned: data.total_earned,
+            profit_or_loss: data.profit_or_loss,
+          };
+        } else {
+          newData = { msg: data };
+        }
+
+        setGetCexData((prevData) => [...prevData, newData]);
+        // cexBotRef.current.scrollTop = cexBotRef.current.scrollHeight;
+      };
+
+      if (socket?.connected) {
+        socket.on("console_data", handleConsoleData);
+        localStorage.setItem("cex_bot", "true");
+        setCexBtn(true);
+      }
+
+      toast.success("bot started.");
+
       const response = await axios.post(
         "https://18.171.200.156:8000/" + _BACKEND_BOT_CEX_TO_CEX_URL,
         formData,
@@ -75,8 +129,6 @@ const Bot = () => {
       console.log("bot response", response);
       if (response?.data) {
         setGetCexData(response?.data);
-        localStorage.setItem("cex_bot", "true");
-        setCexBtn(true);
         return;
       } else {
         toast.error(
@@ -87,6 +139,25 @@ const Bot = () => {
       console.log(error);
       toast.error("server internal error");
       setCexBtn(false);
+    }
+  };
+
+  const stopDEX_botData = async () => {
+    try {
+      const response = await axios.post(
+        "https://apeiron.finance:8000/" + _BACKEND_BOT_DEX_TO_DEX_URL,
+        { key: undefined },
+        { headers: { "Content-Type": "multipart/form-data" } }
+      );
+      // const response = '';
+      localStorage.setItem("dex_bot", "false");
+      setDexBtn(false);
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+      toast.success("bot stop successfully");
+      localStorage.removeItem("dex_bot");
+      setDexBtn(false);
     }
   };
 
@@ -115,18 +186,21 @@ const Bot = () => {
       toast.error("server error");
       console.log(error);
     }
+
     try {
+      localStorage.setItem("dex_bot", "true");
+      setDexBtn(true);
+      toast.success("bot start");
       const response = await axios.post(
         "https://apeiron.finance:8000/" + _BACKEND_BOT_DEX_TO_DEX_URL,
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
+
       // const response = '';
-      localStorage.setItem("dex_bot", "true");
-      setDexBtn(true);
       console.log(response);
     } catch (error) {
-      console.log(error);
+      console.log("error--->", error);
       toast.error("bot server internal error");
       setDexBtn(false);
     }
@@ -192,8 +266,44 @@ const Bot = () => {
     }
   }, []);
 
-  // const [isSocketConnected, setIsSocketConnected] = useState(false);
-  // const socket = io.connect("http://localhost:3001");
+  const [socketData, setSocketData] = useState([]);
+  const [isSocketConnected, setIsSocketConnected] = useState(false);
+
+  useEffect(() => {
+    const socket = io.connect("http://192.168.1.37:8000");
+    setIsSocketConnected(socket);
+
+    // const handleConsoleData = (data) => {
+    //   console.log("cex data: ", data);
+    //   let newData;
+    //   if (data?.binance_ask) {
+    //     newData = {
+    //       huobi_ask: data.huobi_ask,
+    //       binance_ask: data.binance_ask,
+    //       total_spent: data.total_spent,
+    //       total_earned: data.total_earned,
+    //       profit_or_loss: data.profit_or_loss,
+    //     };
+    //   } else {
+    //     newData = { msg: data };
+    //   }
+
+    //   setGetCexData((prevData) => [...prevData, newData]);
+    //   // cexBotRef.current.scrollTop = cexBotRef.current.scrollHeight;
+    // };
+
+    // socket.on("console_data", handleConsoleData);
+
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
+  useEffect(() => {
+    if (cexBotRef.current) {
+      cexBotRef.current.scrollTop = cexBotRef.current.scrollHeight;
+    }
+  }, [getCexData]);
+
   // useEffect(() => {
   //   socket?.on("connect", () => {
   //     console.log("Socket connected.");
@@ -205,30 +315,55 @@ const Bot = () => {
   //     setIsSocketConnected(false);
   //   });
 
-  //   socket?.on("receive_message", (data) => {
-  //     console.log("Received message:", data);
-  //   });
+  //   // socket?.on("data", (data) => {
+  //   //   console.log("Socket Received data:", data);
+  //   //   setSocketData(data);
+  //   // });
+  //   const handleConsoleLog = (message) => {
+  //     if (socketData) setSocketData((prevLogs) => [...prevLogs, message]);
+  //   };
+
+  //   // Attach the event handler
+  //   socket.on("console_log", handleConsoleLog);
+
   //   return () => {
   //     socket?.disconnect();
   //   };
   // }, []);
 
-  // const joinRoom = ()=>{
-  //   if(isSocketConnected){
-  //     socket?.emit('join_room', { room: 1 });
-  //     console.log(`Joined room: 1`);}
-  // }
+  // const [botStart, setBotStart] = useState(false);
+  // const startBot = () => {
+  //   if (isSocketConnected) {
+  //     if (botStart) {
+  //       setBotStart(false);
+  //       socket?.emit("stop");
+  //     } else {
+  //       setBotStart(true);
+  //       socket?.emit("start");
+  //       console.log(`Socket is started`);
+  //     }
+  //   }
+  // };
 
-  // useEffect(() => {
-  //   console.log("Socket:", isSocketConnected);
-  // }, [isSocketConnected]);
+  useEffect(() => {
+    console.log("Socket :", isSocketConnected);
+  }, [isSocketConnected]);
+
+  useEffect(() => {
+    console.log("socket data: ", getCexData);
+  });
 
   return (
     <div className="body header-fixed is_dark">
       <Header />
       <section className="pt-5">
-        {/* <button className="btn btn-success" onClick={joinRoom}>Click Me</button>
-      <br /> */}
+        {/* <button
+          className={`btn ${botStart ? "btn-danger" : "btn-success"}`}
+          onClick={startBot}
+        >
+          {botStart ? `Stop ${parseFloat(socketData)?.toFixed(2)}` : `Start`}
+        </button>
+        <br /> */}
 
         <div className="container-fluid">
           <div className="row">
@@ -306,8 +441,50 @@ const Bot = () => {
                   {dropdownCEX ? (
                     // ct CEX_CEX
                     <div className="ct_cex_cex show">
-                      <div className="ct_empty_box mb-4">
-                        {getCexData && JSON.stringify(getCexData, null, 2)}
+                      <div
+                        className="ct_empty_box mb-4"
+                        ref={cexBotRef}
+                        style={{ overflowY: "auto" }}
+                      >
+                        {getCexData?.map((item, key) =>
+                          item?.huobi_ask ? (
+                            <div key={key}>
+                              <p>
+                                Huobi ALGO/USDT ask price: {item?.huobi_ask}
+                              </p>
+                              <p>
+                                Binance ALGO/USDT ask price: {item?.binance_ask}
+                              </p>
+                              <p>Total Spent: {item?.total_spent}</p>
+                              <p>Total Earned: {item?.total_earned}</p>
+                              <p>Profit or Loss: {item?.profit_or_loss}</p>
+                              <br />
+                            </div>
+                          ) : (
+                            <div key={key}>
+                              <p>{item?.msg}</p> <br />
+                            </div>
+                          )
+                        )}
+                        {/* {getCexData?.huobi_ask ? (
+                          <>
+                            <p>
+                              Huobi ALGO/USDT ask price :{" "}
+                              {getCexData?.huobi_ask}{" "}
+                            </p>
+                            <p>
+                              Binance ALGO/USDT ask price :{" "}
+                              {getCexData?.binance_ask}
+                            </p>
+                            <p>Total Spent : {getCexData?.total_spent} </p>
+                            <p>Total Earned : {getCexData?.total_earned} </p>
+                            <p>
+                              Profit or Loss : {getCexData?.profit_or_loss}{" "}
+                            </p>
+                          </>
+                        ) : (
+                          <>{getCexData}</>
+                        )} */}
                       </div>
                       <div className="mb-3">
                         <h6 className="mb-2 ct_fs_16 ct_fw_400">Huobi</h6>
@@ -428,10 +605,7 @@ const Bot = () => {
                         {cexBtn ? (
                           <button
                             className="btn-action w-100"
-                            onClick={() => {
-                              localStorage.removeItem("cex_bot");
-                              setCexBtn(false);
-                            }}
+                            onClick={stopCEX_botData}
                             style={{ background: "red" }}
                           >
                             Stop Bot
@@ -560,10 +734,7 @@ const Bot = () => {
                             <button
                               className="btn-action w-100"
                               style={{ backgroundColor: "red" }}
-                              onClick={() => {
-                                localStorage.removeItem("dex_bot");
-                                setDexBtn(false);
-                              }}
+                              onClick={stopDEX_botData}
                             >
                               Stop Bot
                             </button>
